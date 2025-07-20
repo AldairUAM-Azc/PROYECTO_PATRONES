@@ -1,0 +1,289 @@
+.centrar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: max-content;
+  margin: auto;
+}
+
+h1 {
+    text-align: center;
+    padding: 0;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.main-container {
+    display: grid;
+    grid-template-areas:
+        "general-izq vip general-der"
+        "footer footer footer"
+        "botones botones compra";
+    gap: 20px;
+    /* grid-template-columns: repeat(9, 1fr);
+    width: 100%;
+    margin: 0 auto;
+    padding: 0; */
+    max-width: 100%;
+}
+
+.general, .escenario, .centro{
+    padding: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.general {
+    display: grid;
+    grid-template-columns: repeat(3, auto); /* Cinco filas */
+    grid-auto-rows: auto;
+    gap: 20px; /* Espacio entre mesas */
+    justify-content: center;   
+}   
+
+.escenario {
+    grid-area: escenario;
+    text-align: center;
+    font-weight: bold;
+    background: #e5ceb9;
+    padding: 20px;
+    margin: auto;
+    width: 45%;
+}
+
+
+.izq {
+    grid-area: general-izq;
+
+}
+
+.der {
+    grid-area: general-der;
+}
+
+.centro {
+    grid-area: vip;
+    display: grid;
+    grid-template-areas:
+        "titulos"
+        "centro-mesas";   
+    gap: 20px;
+}
+
+.centro-mesas {
+    grid-area: centro-mesas;
+    display: grid;
+    grid-template-columns: repeat(4,auto);
+    gap: 20px;
+    justify-self: center;
+}
+
+.footer {
+    grid-area: footer;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.footer-izq{
+    display: grid;
+    grid-template-rows: repeat(3, auto);
+    gap: 20px;
+    justify-self: center;
+    justify-items: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: fit-content;  /* Ancho del div */
+    height: fit-content;
+} 
+
+.footer-der{
+    display: flex;
+    justify-self: end;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: fit-content;  /* Ancho del div */
+    height: fit-content;
+    margin-right: 18%;
+    padding: 3%;
+}
+
+.table-wrapper {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.table {
+    width: 40px;
+    height: 40px;
+    background-color: #007bff;
+    transform: rotate(45deg);
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* girando texto */
+.numMesa{
+    transform: rotate(-45deg);
+}
+
+/* Color amarillo para las mesas vip */
+.table.vip{
+    background-color: #f8ca67;
+}
+
+.table.tres,
+.table.dos{
+    transform: rotate(0deg);
+    border-radius: 90px / 60px;
+}
+
+/*Color gris preferente*/
+.table.preferente{
+    background-color: rgb(228, 228, 228);
+}
+
+/*laterales*/
+.laterales{
+    background-color: orangered;
+}
+
+.chair {
+    width: 14px;
+    height: 14px;
+    background-color: #8B4513;
+    position: absolute;
+    border-radius: 2px;
+    border: 1px solid #654321;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+    
+}
+
+/*Posicion de las mesas de 4 sillas*/
+.chair:nth-child(2) { right: 0; top: 0; transform: translateY(60%) translateX(-20%) rotate(45deg); }
+.chair:nth-child(3) { bottom: 0; left: 0; transform: translateY(-60%) translateX(20%) rotate(45deg); }
+.chair:nth-child(4) { right: 0; bottom: 0; transform: translateY(-60%) translateX(-20%) rotate(45deg); }
+.chair:nth-child(5) { top: 0; left: 0; transform: translateY(60%) translateX(20%) rotate(45deg); }
+
+.chair3 {
+    width: 14px;
+    height: 14px;
+    background-color: #8B4513;
+    position: absolute;
+    border-radius: 2px;
+    border: 1px solid #654321;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+.chair3:nth-child(2)  { right: 0; bottom: 40%;}
+.chair3:nth-child(3) { bottom: 40%; }
+.chair3:nth-child(4) { bottom: 0; left: 40%;}
+
+.chair2 {
+    width: 14px;
+    height: 14px;
+    background-color: #8B4513;
+    position: absolute;
+    border-radius: 2px;
+    border: 1px solid #654321;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+.chair2:nth-child(2) { bottom: 0%; transform: translateX(60%) translateY(-20%);}
+.chair2:nth-child(3) { bottom: 0%; right: 0%; transform: translateX(-60%) translateY(-20%)}
+
+/*cosas nuevas*/
+
+.chair.activa{
+    background-color: aqua;
+}
+
+.chair3.activa{
+    background-color: aqua;
+}
+
+.chair2.activa{
+    background-color: aqua;
+}
+
+.compra{
+    grid-area: compra;
+    display: block; /* El botón sigue siendo un bloque */
+    justify-self: end; /* Alineamos el botón a la derecha */
+    background-color: #8e735b; /* Marrón suave/beige cálido (combinable con café) */
+    color: white; /* Amarillo mostaza cálido (complementa el amarillo) */
+    font-size: 16px;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    margin-right: 18%;
+}
+
+.compra:active {
+    background-color: #6b4f39;  /* Un tono más oscuro de marrón */
+    color: white; /* Un amarillo aún más cálido y profundo */
+    transform: scale(0.98); /* Efecto de reducir el tamaño al hacer clic */
+}
+
+.compra:hover {
+    background-color: #7a5d45;  /* Marrón más oscuro (refleja el café) */
+    color: white; /* Amarillo más brillante (llamativo pero armonioso) */
+    transform: scale(1.05); /* Efecto de agrandar el botón */
+}
+
+.confirma-compra{
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    height: fit-content;
+    background: white;
+    z-index: 9999;
+}
+
+.confirma-compra h2{
+    text-align: center;
+}
+
+.volver{
+    position: absolute;
+    bottom: 20px; /* Distancia desde abajo */
+    right: 20px; /* Distancia desde la derecha */
+}
+
+/*Para espacio en el centro*/
+
+.centro-mesas > :nth-child(2){
+    margin-right: 11rem;
+}
+
+.centro-mesas > :nth-child(3){
+    margin-left: 11rem;
+}
+
+.fondoCompra{
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+}
+
+.ocupada{
+    background-color: rgb(84, 255, 16);
+}

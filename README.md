@@ -4,6 +4,31 @@
 
 <a href='./patternOptions.md'><b>Posibles patrones que se pueden aplicar al proyecto</b></a>
 
+## Instalación
+
+### Prerequisitos
+Es un proyecto de Maven asi que necesitas abrirlo en un IDE para Java como NetBeans o IntelliJ. Por otro lado, puedes usar VSCode después de descargar el pack de extensiones para Java.
+### Instrucciones
+1. Clonar el proyecto
+```bash
+  git clone https://github.com/AldairUAM-Azc/PROYECTO_PATRONES
+```
+Alternativamente, puedes descargar el código del proyecto accediendo a la url del repositorio. Tendrás que descomprimir el directorio del proyecto y abrirlo con el IDE de Java que tengas.
+
+2. Construir el proyecto
+
+Utiliza maven para construir el proyecto. Asi se instalan todas las dependencias necesarias definidas en el pom.xml.
+En el caso de de NetBeans puedes clickar el ícono del martillo 🔨 en la interfaz gráfica para construir el proyecto.
+
+3. Ejecutar el proyecto
+
+Utiliza maven para ejecutar el proyecto. 
+En el caso de NetBeans puedes clickar el ícono de Run Project ▶ en la interfaz gráfica para contruir el proyecto
+
+4. Abrir el proyecto en el navegador
+
+El proyecto por defecto se ejecuta en el puerto 8080 del localhost por lo que hay que ingresar localhost:8080 en tu navegador para interactuar con el sistema.
+
 ## Objetivos
 Analisis, disenio e implementacion parcial de un sistema de informacion
 

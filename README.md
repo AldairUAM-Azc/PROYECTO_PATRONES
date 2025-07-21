@@ -1,6 +1,8 @@
 # Proyecto Final Patrones de Disenio
 
-<a href='./patternSummary/patternSummary.md'><b>Resumen de los patrones vistos en el curso</b></a>
+<a href='./patternSummary.md'><b>Resumen de los patrones vistos en el curso</b></a>
+
+<a href='./patternOptions.md'><b>Posibles patrones que se pueden aplicar al proyecto</b></a>
 
 ## Objetivos
 Analisis, disenio e implementacion parcial de un sistema de informacion

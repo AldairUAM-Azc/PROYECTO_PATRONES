@@ -16,11 +16,16 @@ import java.util.logging.Logger;
  */
 public class Server {
 
-    public static DatabaseConnection dbConn = DatabaseConnection.getInstance();
+//    public static DatabaseConnection dbConn = DatabaseConnection.getInstance();
+    public static EventosDAO eventosDAO;
+
+    public Server() {
+        eventosDAO = new EventosDAO();
+    }
 
     public static void listadoDeEventos(Context ctx) {
         try {
-            List<Evento> eventos = dbConn.getAllEventos();
+            List<Evento> eventos = eventosDAO.getAllEventos();
             ctx.json(eventos);
         } catch (SQLException ex) {
             ctx.status(500).result("Error interno del servidor al obtener el listado de eventos");
@@ -41,7 +46,7 @@ public class Server {
         String nombre = ctx.pathParam("nombre");
 
         try {
-            Evento evento = dbConn.getEventoPorNombre(nombre);
+            Evento evento = eventosDAO.getEventoPorNombre(nombre);
             if (evento == null) {
                 ctx.status(400).result("Evento no encontrado");
             } else {
@@ -76,7 +81,7 @@ public class Server {
         String precioGeneral = ctx.formParam("precio");
         String precioLaterales = ctx.formParam("precio");
         try {
-            if (dbConn.crearEvento(nombre, tipo, fecha, precioVIP, precioPreferente, precioGeneral, precioLaterales)) {
+            if (eventosDAO.crearEvento(nombre, tipo, fecha, precioVIP, precioPreferente, precioGeneral, precioLaterales)) {
                 ctx.result("Evento agregado ID:");
             } else {
                 ctx.result("Evento no agregado");

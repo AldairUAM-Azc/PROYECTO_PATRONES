@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,5 +58,34 @@ public class EventosDAO {
 
     boolean crearEvento(String nombre, String tipo, String fecha, String precioVIP, String precioPreferente, String precioGeneral, String precioLaterales) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    List<Evento> getEventos() throws SQLException {
+        List<Evento> eventos = new ArrayList<>();
+        String query = "SELECT "
+                + "* "
+                + "FROM evento";
+
+        try {
+            PreparedStatement ps = dbConn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int idEvento = rs.getInt("idEvento");
+                String nombre = rs.getString("nombre");
+                int idTipoEvento = rs.getInt("idTipoEvento");
+                String descripcion = rs.getString("descripcion");
+                Date fecha = rs.getDate("fecha");
+                Evento ev = new Evento();
+                ev.setIdEvento(idEvento);
+                ev.setNombre(nombre);
+                ev.setIdEvento(idTipoEvento);
+                ev.setDescripcion(descripcion);
+                ev.setFecha(fecha);
+                eventos.add(ev);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return eventos;
     }
 }

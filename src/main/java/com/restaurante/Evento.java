@@ -10,6 +10,7 @@ public class Evento {
 
     private int idEvento;
     private String nombre;
+    private int idTipoEvento;
     private String tipo;
     private String descripcion;
     private Date fecha;
@@ -66,6 +67,14 @@ public class Evento {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    public int getIdTipoEvento() {
+        return idTipoEvento;
+    }
+
+    public void setIdTipoEvento(int idTipoEvento) {
+        this.idTipoEvento = idTipoEvento;
     }
 
 }

@@ -33,12 +33,12 @@ public class Server {
     }
 
     public static void evento(Context ctx) {
-//    try {
-//      Evento evento = dbConn.getEventosAllFields();
-//      ctx.json(evento);
-//    } catch (SQLException ex) {
-//      ctx.status(500).result("Error interno del servidor al obtener el evento");
-//    }
+    try {
+      List<Evento> eventos = eventosDAO.getEventos();
+      ctx.json(eventos);
+    } catch (SQLException ex) {
+      ctx.status(500).result("Error interno del servidor al obtener el evento");
+    }
         ctx.result("NO IMPLEMENTADO");
     }
 

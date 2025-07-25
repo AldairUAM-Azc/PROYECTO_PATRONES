@@ -4,11 +4,12 @@
  */
 package com.restaurante;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,7 +81,16 @@ public class EventosDAO {
     }
 
     boolean crearEvento(String nombre, String tipo, String fecha, String precioVIP, String precioPreferente, String precioGeneral, String precioLaterales) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String query = "CALL evento" + tipo + "( ? , ? , ? , ? , ? , ? , ? );";
+        CallableStatement ps = dbConn.prepareCall(query);
+        ps.setString(1, nombre);
+        ps.setString(2, tipo);
+        ps.setDate(3, Date.valueOf(fecha));
+        ps.setDouble(4, Float.parseFloat(precioVIP));
+        ps.setDouble(5, Float.parseFloat(precioPreferente));
+        ps.setDouble(6, Float.parseFloat(precioGeneral));
+        ps.setDouble(7, Float.parseFloat(precioLaterales));
+        return ps.execute();
     }
 
     List<Evento> getEventos() throws SQLException {

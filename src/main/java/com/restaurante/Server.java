@@ -75,10 +75,10 @@ public class Server {
         String nombre = ctx.formParam("nombre");
         String fecha = ctx.formParam("fecha");
         String tipo = ctx.formParam("tipo");
-        String precioVIP = ctx.formParam("precio");
-        String precioPreferente = ctx.formParam("precio");
-        String precioGeneral = ctx.formParam("precio");
-        String precioLaterales = ctx.formParam("precio");
+        String precioVIP = ctx.formParam("precio.VIP");
+        String precioPreferente = ctx.formParam("precio.Preferente");
+        String precioGeneral = ctx.formParam("precio.General");
+        String precioLaterales = ctx.formParam("precio.Laterales");
         try {
             if (eventosDAO.crearEvento(nombre, tipo, fecha, precioVIP, precioPreferente, precioGeneral, precioLaterales)) {
                 ctx.result("Evento agregado ID:");

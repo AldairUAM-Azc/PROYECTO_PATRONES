@@ -125,8 +125,12 @@ public class DatabaseConnection {
 
     }
 
-    public PreparedStatement prepareStatement(String query)throws SQLException {
+    public PreparedStatement prepareStatement(String query) throws SQLException {
         return connection.prepareStatement(query);
+    }
+
+    public CallableStatement prepareCall(String query) throws SQLException {
+        return connection.prepareCall(query);
     }
 
     public Connection getConnection() {

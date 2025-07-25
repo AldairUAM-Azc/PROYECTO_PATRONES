@@ -43,7 +43,7 @@ public class EventosDAO {
                 ev.setIdEvento(idEvento);
                 ev.setNombre(nombre);
                 ev.setTipo(tipo);
-                eventos.add(new Evento(idEvento, nombre, tipo));
+                eventos.add(ev);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);

@@ -111,4 +111,42 @@ public class EventosDAO {
         }
         return eventos;
     }
+
+    List<EstadoSillas> getEstadoSillas(int targetIdEvento) throws SQLException {
+        List<EstadoSillas> estadoSillasLista = new ArrayList<>();
+        String query = """ 
+                   SELECT 
+                       e.nombre, 
+                       m.numero AS Mesa, 
+                       s.letra AS Silla, 
+                       s.estado , 
+                       p.precio 
+                   FROM evento e     
+                     JOIN precioEvento p ON e.idEvento = p.idEvento    
+                     JOIN mesa m ON p.idPrecio = m.idPrecio    
+                     JOIN silla s ON m.idMesa = s.idMesa    
+                   WHERE e.idEvento =  ?;""";
+        try {
+            PreparedStatement ps = dbConn.prepareStatement(query);
+            ps.setInt(1, targetIdEvento);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String eventoNombre = rs.getString("nombre");
+                int mesaNumero = rs.getInt("Mesa");
+                String sillaLetra = rs.getString("Silla");
+                boolean sillaEstado = rs.getBoolean("estadO");
+                double precio = rs.getDouble("precio");
+                EstadoSillas estadoSillas = new EstadoSillas();
+                estadoSillas.setEventoNombre(eventoNombre);
+                estadoSillas.setMesaNumero(mesaNumero);
+                estadoSillas.setSillaLetra(sillaLetra);
+                estadoSillas.setSillaEstado(sillaEstado);
+                estadoSillas.setPrecio(precio);
+                estadoSillasLista.add(estadoSillas);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return estadoSillasLista;
+    }
 }

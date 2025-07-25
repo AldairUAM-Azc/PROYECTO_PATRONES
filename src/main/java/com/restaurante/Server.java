@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,12 +34,12 @@ public class Server {
     }
 
     public static void evento(Context ctx) {
-    try {
-      List<Evento> eventos = eventosDAO.getEventos();
-      ctx.json(eventos);
-    } catch (SQLException ex) {
-      ctx.status(500).result("Error interno del servidor al obtener el evento");
-    }
+        try {
+            List<Evento> eventos = eventosDAO.getEventos();
+            ctx.json(eventos);
+        } catch (SQLException ex) {
+            ctx.status(500).result("Error interno del servidor al obtener el evento");
+        }
         ctx.result("NO IMPLEMENTADO");
     }
 
@@ -59,17 +60,15 @@ public class Server {
     }
 
     public static void estadoSillas(Context ctx) {
-//        System.out.println(ctx.body());
-//        dbConn.estadoSillas();
-//        String query = """ 
-//                   SELECT e.nombre, m.numero AS Mesa, s.letra AS Silla, s.estado , p.precio 
-//                   FROM evento e     
-//                     JOIN precioEvento p ON e.idEvento = p.idEvento    
-//                     JOIN mesa m ON p.idPrecio = m.idPrecio    
-//                     JOIN silla s ON m.idMesa = s.idMesa    
-//                   WHERE e    .idEvento =  ?;""";
-//        ctx.result("sillas " + idEvento);
-//        throw new UnsupportedOperationException("Not implemented yet");
+        // this def incorrect, i need to check javalin doc toknow how to get requests params
+//        int idEvento = ctx.body().codePointAt(0);
+        int idEvento = Integer.parseInt(ctx.req().getParameter("idEvento"));
+        try {
+            List<EstadoSillas> estadoSillas = eventosDAO.getEstadoSillas(idEvento);
+            ctx.json(estadoSillas);
+        } catch (SQLException ex) {
+            ctx.status(500).result("Error interno del servidor al obtener el listado de eventos");
+        }
     }
 
     public static void crearEvento(Context ctx) {

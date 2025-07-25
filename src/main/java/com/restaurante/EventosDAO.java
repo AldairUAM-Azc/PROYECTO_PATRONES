@@ -52,8 +52,31 @@ public class EventosDAO {
         return eventos;
     }
 
-    public Evento getEventoPorNombre(String nombre) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Evento getEventoPorNombre(String targetNombre) throws SQLException {
+        Evento evento = new Evento();
+        String query = "SELECT * FROM evento WHERE nombre = ?";
+
+        try {
+            PreparedStatement ps = dbConn.prepareStatement(query);
+            ps.setString(1, targetNombre);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int idEvento = rs.getInt("idEvento");
+                String nombre = rs.getString("nombre");
+                int idTipoEvento = rs.getInt("idTipoEvento");
+                String descripcion = rs.getString("descripcion");
+                Date fecha = rs.getDate("fecha");
+
+                evento.setIdEvento(idEvento);
+                evento.setNombre(nombre);
+                evento.setIdTipoEvento(idTipoEvento);
+                evento.setDescripcion(descripcion);
+                evento.setFecha(fecha);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return evento;
     }
 
     boolean crearEvento(String nombre, String tipo, String fecha, String precioVIP, String precioPreferente, String precioGeneral, String precioLaterales) throws SQLException {

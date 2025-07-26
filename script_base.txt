@@ -1,0 +1,238 @@
+CREATE DATABASE IF NOT EXISTS reservacion;
+
+USE reservacion;
+
+CREATE TABLE tipoEvento(
+	idTipoEvento INT AUTO_INCREMENT,
+    tipo VARCHAR(20),
+    PRIMARY KEY (idTipoEvento)
+);
+
+CREATE TABLE evento(
+	idEvento INT AUTO_INCREMENT,
+	nombre VARCHAR(60) NOT NULL,
+    idTipoEvento INT NOT NULL,
+    descripcion VARCHAR(500),
+    fecha DATE,
+    PRIMARY KEY (idEvento),
+    FOREIGN KEY (idTipoEvento) REFERENCES tipoEvento(idTipoEvento)
+); 
+
+CREATE TABLE tipoMesa(
+	idTipoMesa INT,
+    tipo VARCHAR(20),
+    PRIMARY KEY (idTipoMesa)
+);
+
+-- tabla para control de precios
+CREATE TABLE precioEvento(
+	idPrecio INT AUTO_INCREMENT,
+    idEvento INT NOT NULL,
+    idTipoMesa INT NOT NULL,
+    precio double,
+    PRIMARY KEY (idPrecio),
+    FOREIGN KEY (idEvento) REFERENCES evento (idEvento)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (idTipoMesa) REFERENCES tipoMesa (idTipoMesa)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE mesa(
+	idMesa INT AUTO_INCREMENT,
+    numero INT NOT NULL,
+    idPrecio INT NOT NULL,
+    PRIMARY KEY (idMesa),
+    FOREIGN KEY(idPrecio) REFERENCES precioEvento(idPrecio)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- ALTER TABLE mesa
+-- MODIFY nombre INT NOT NULL;
+
+CREATE TABLE Reserva(
+	codigo INT,
+    nombre VARCHAR(60),
+    telefono VARCHAR(15),
+    PRIMARY KEY (codigo)
+);
+
+CREATE TABLE silla(
+	idSilla INT AUTO_INCREMENT,
+    letra CHAR NOT NULL,
+    idMesa INT,
+    estado BOOLEAN DEFAULT FALSE,
+    enEspera BOOLEAN DEFAULT FALSE,
+    codigo INT,
+    PRIMARY KEY (idSilla),
+    FOREIGN KEY (idMesa) REFERENCES mesa(idMesa)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (codigo) REFERENCES reserva(codigo)
+    ON UPDATE CASCADE
+);
+
+-- creacion de evento para Trova mesas 
+
+-- DROP PROCEDURE mesasCuatro;
+DELIMITER //
+CREATE PROCEDURE mesasCuatro(IN cant INT, IN num INT,IN idPr INT)
+BEGIN
+    DECLARE contador INT DEFAULT 0;
+    DECLARE idMes INT;
+    WHILE contador < cant DO
+      INSERT INTO mesa(numero,idPrecio)
+      VALUES (num,idPr);
+      SET idMes = last_insert_id();
+      INSERT INTO silla(letra,idMesa)
+      VALUES ('A',idMes),
+	     ('B',idMes),
+             ('C',idMes),
+             ('D',idMes);
+      SET contador = contador + 1;
+      SET num = num + 1;
+   END WHILE;
+END
+// DELIMITER ;
+
+-- DROP PROCEDURE mesasTres;
+DELIMITER //
+CREATE PROCEDURE mesasTres(IN cant INT, IN num INT,IN idPr INT)
+BEGIN
+    DECLARE contador INT DEFAULT 0;
+    DECLARE idMes INT;
+    WHILE contador < cant DO
+      INSERT INTO mesa(numero,idPrecio)
+      VALUES (num,idPr);
+      SET idMes = last_insert_id();
+      INSERT INTO silla(letra,idMesa)
+      VALUES ('A',idMes),
+	     ('B',idMes),
+             ('C',idMes);
+      SET contador = contador + 1;
+      SET num = num + 1;
+   END WHILE;
+END
+// DELIMITER ;
+
+-- DROP PROCEDURE mesasDos;
+DELIMITER //
+CREATE PROCEDURE mesasDos(IN cant INT, IN num INT,IN idPr INT)
+BEGIN
+	DECLARE contador INT DEFAULT 0;
+    DECLARE idMes INT;
+    WHILE contador < cant DO
+      INSERT INTO mesa(numero,idPrecio)
+      VALUES (num,idPr);
+      SET idMes = last_insert_id();
+      INSERT INTO silla(letra,idMesa)
+	  VALUES ('A',idMes), 
+		 ('B',idMes);
+      SET contador = contador + 1;
+      SET num = num + 1;
+   END WHILE;
+END
+// DELIMITER ;
+
+
+-- DROP PROCEDURE eventoTrova;
+DELIMITER //
+CREATE PROCEDURE eventoTrova(IN nombre VARCHAR(45), IN descripcion VARCHAR(200),
+IN fecha DATE, IN VIP DOUBLE, IN Preferente DOUBLE, 
+IN Gen DOUBLE, IN Laterales DOUBLE)
+BEGIN
+   DECLARE cont INT DEFAULT 0;
+   DECLARE idE INT;
+   DECLARE pVip INT;
+   DECLARE pPref INT;
+   DECLARE pGen INT;
+   DECLARE pLat INT;
+   -- Insertando los datos del evento
+   INSERT INTO Evento (nombre,descripcion,fecha,idTipoEvento)
+   VALUES (nombre,descripcion,fecha,1);
+   SET idE = LAST_INSERT_ID();
+   -- insertamos los precios del evento
+   INSERT INTO precioEvento(idEvento,idTipoMesa,precio)
+   VALUES (idE,1,VIP);
+   SET pVip = LAST_INSERT_ID();
+   INSERT INTO precioEvento(idEvento,idTipoMesa,precio)
+   VALUES (idE,2,Preferente);
+   SET pPref = last_insert_id();
+   INSERT INTO precioEvento(idEvento,idTipoMesa,precio)
+   VALUES(idE,3,Gen);
+   SET pGen = last_insert_id();
+   INSERT INTO precioEvento(idEvento,idTipoMesa,precio)
+   VALUES(idE,4,Laterales);
+   SET pLat = LAST_INSERT_ID();
+   -- insertamos mesas con sus precios
+   -- Mesas laterales izquierda
+   CALL mesasCuatro(5,311,pLat);
+   CALL mesasCuatro(4,321,pLat);
+   CALL mesasCuatro(2,331,pVip);
+   CALL mesasCuatro(2,333,pPref);
+   CALL mesasCuatro(1,335,pGen);
+   -- Mesas Pista
+   REPEAT 
+	   CALL mesasTres(3,411 + cont,pVip);
+	   CALL mesasCuatro(1,414 + cont,pPref);
+       CALL mesasCuatro(2,415 + cont ,pGen);
+	   CALL mesasTres(1,417 + cont ,pGen);
+       SET cont = cont + 10;
+   UNTIL cont > 50
+   END REPEAT;
+   -- Mesas Laterales derecha
+   CALL mesasCuatro(2,511,pVip);
+   CALL mesasCuatro(2,513,pPref);
+   CALL mesasCuatro(1,515,pGen);
+   CALL mesasCuatro(4,521,pLat);
+   CALL mesasCuatro(5,531,pLat);
+   -- Mesas plataforma elevada
+   CALL mesasTres(5,214,pPref);
+END
+// DELIMITER ;
+
+DROP PROCEDURE eventoGeneral;
+DELIMITER //
+CREATE PROCEDURE eventoGeneral(IN nombre VARCHAR(45), IN descripcion VARCHAR(200),
+IN fecha DATE, IN VIP DOUBLE, IN Preferente DOUBLE, 
+IN Gen DOUBLE)
+BEGIN
+   DECLARE cont INT DEFAULT 0;
+   DECLARE idE INT;
+   DECLARE pVip INT;
+   DECLARE pPref INT;
+   DECLARE pGen INT;
+
+   -- Insertando los datos del evento
+   INSERT INTO Evento (nombre,descripcion,fecha,idTipoEvento)
+   VALUES (nombre,descripcion,fecha,3);
+   SET idE = LAST_INSERT_ID();
+   -- insertamos los precios del evento
+   INSERT INTO precioEvento(idEvento,idTipoMesa,precio)
+   VALUES (idE,1,VIP);
+   SET pVip = LAST_INSERT_ID();
+   INSERT INTO precioEvento(idEvento,idTipoMesa,precio)
+   VALUES (idE,2,Preferente);
+   SET pPref = last_insert_id();
+   INSERT INTO precioEvento(idEvento,idTipoMesa,precio)
+   VALUES(idE,3,Gen);
+   SET pGen = last_insert_id();
+   -- insertamos mesas con sus precios
+   -- Mesas laterales izquierda
+   CALL mesasCuatro(5,311,pPref);
+   CALL mesasCuatro(4,321,pPref);
+   CALL mesasCuatro(5,331,pPref);
+   -- Mesas Pista
+   REPEAT 
+	   CALL mesasCuatro(6,411 + cont,pVip);
+       SET cont = cont + 10;
+   UNTIL cont > 30
+   END REPEAT;
+   -- Mesas Laterales derecha
+   CALL mesasCuatro(5,511,pPref);
+   CALL mesasCuatro(4,521,pPref);
+   CALL mesasCuatro(5,531,pPref);
+   -- Mesas plataforma elevada
+   CALL mesasTres(5,201,pGen);
+   -- Mesas extrra
+   CALL mesasDos(5,214,pGen);
+END
+// DELIMITER ;

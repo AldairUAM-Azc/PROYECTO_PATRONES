@@ -166,4 +166,23 @@ public class EventosDAO {
         }
         return estadoSillasLista;
     }
+
+    public boolean reservarSillas(int idEvento, int mesaNumero, String sillaLetra) throws SQLException {
+
+        String query = """
+                        UPDATE silla s
+                            JOIN mesa m ON m.idMesa = s.idMesa
+                            JOIN precioEvento p ON p.idPrecio = m.idPrecio
+                            JOIN evento e ON e.idEvento = p.idEvento
+                        SET s.estado = true
+                            WHERE m.numero = ? 
+                                AND e.idEvento = ?
+                                AND s.letra = ?;
+                       """;
+        PreparedStatement ps = dbConn.prepareStatement(query);
+        ps.setInt(1, mesaNumero);
+        ps.setInt(2, idEvento);
+        ps.setString(3, sillaLetra);
+        return ps.execute(); 
+    }
 }

@@ -147,6 +147,18 @@ public class Server {
     }
 
     public static void reservarSillas(Context ctx) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        int idEvento = Integer.parseInt(ctx.pathParam("idEvento"));
+        ReservacionJSON reservacion = ctx.bodyAsClass(ReservacionJSON.class);
+
+        try {
+            boolean isReservacion = eventosDAO.reservarSillas(idEvento, reservacion.getMesa(), reservacion.getSilla());
+            if (isReservacion) {
+                ctx.result("Reservacion confirmada.");
+            } else {
+                ctx.result("No se pudo realizar la reservacion");
+            }
+        } catch (SQLException ex) {
+            ctx.status(500).result("Couldn't make reservation");
+        }
     }
 }

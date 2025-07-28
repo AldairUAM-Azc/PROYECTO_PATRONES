@@ -28,11 +28,15 @@ public class EventosDAO {
 
     public List<Evento> getAllEventos() throws SQLException {
         List<Evento> eventos = new ArrayList<>();
-        String query = "SELECT "
-                + "e.idEvento AS idEvento,"
-                + "e.nombre AS nombre,"
-                + "t.tipo AS tipo"
-                + "FROM evento e JOIN tipoEvento t ON e.idTipoEVento = t.idTipoEvento";
+        String query = """
+                    SELECT 
+                      e.idEvento AS idEvento,
+                      e.nombre AS nombre,
+                      t.tipo AS tipo
+                    FROM 
+                      evento AS e 
+                      JOIN tipoEvento AS t ON e.idTipoEVento = t.idTipoEvento
+                  """;
 
         try {
             PreparedStatement ps = dbConn.prepareStatement(query);
@@ -161,6 +165,7 @@ public class EventosDAO {
                 estadoSillas.setPrecio(precio);
                 estadoSillasLista.add(estadoSillas);
             }
+            return estadoSillasLista;
         } catch (SQLException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -183,6 +188,6 @@ public class EventosDAO {
         ps.setInt(1, mesaNumero);
         ps.setInt(2, idEvento);
         ps.setString(3, sillaLetra);
-        return ps.execute(); 
+        return ps.execute();
     }
 }

@@ -20,11 +20,9 @@ import java.util.logging.Logger;
  */
 public class Server {
 
-//    public static DatabaseConnection dbConn = DatabaseConnection.getInstance();
-    public static EventosDAO eventosDAO;
+    public static EventosDAO eventosDAO = new EventosDAO();
 
     public Server() {
-        eventosDAO = new EventosDAO();
     }
 
     public static void listadoDeEventos(Context ctx) {
@@ -122,33 +120,42 @@ public class Server {
                 ctx.result("Evento agregado ID:");
             } else {
                 ctx.result("Evento no agregado");
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Server.class
+                    .getName()).log(Level.SEVERE, null, ex);
             ctx.status(500).result("Error en el servidor");
         }
     }
 
     public static void sembrado(Context ctx) {
-        String jsonDataString = ctx.formParam("data");
-        ObjectMapper mapper = new ObjectMapper();
-        EventData eventData = null;
-        try {
-            eventData = mapper.readValue(jsonDataString, EventData.class);
-        } catch (JsonProcessingException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            ctx.status(500).result("Error interno del servidor");
-        }
+        String eventDataJsonString = ctx.formParam("data");
+        if (eventDataJsonString != null && !eventDataJsonString.isEmpty()) {
+            ObjectMapper objectMapper = new ObjectMapper();
 
-        String viewName = "templates/" + eventData.getTipo() + ".html";
-        Map<String, Object> model = new HashMap<>();
-        model.put("evento", eventData);
-        ctx.render(viewName, model);
+            try {
+                EventData eventData = objectMapper.readValue(eventDataJsonString, EventData.class);
+                System.out.println(eventData.getIdEvento());
+                System.out.println(eventData.getNombre());
+                System.out.println(eventData.getTipo());
+
+                String viewName = "templates/" + eventData.getTipo() + ".html";
+                Map<String, Object> model = new HashMap<>();
+                model.put("evento", eventData);
+                ctx.render(viewName, model);
+            } catch (JsonProcessingException e) {
+                ctx.status(500).result("Error parsing JSON: " + e.getMessage());
+            }
+        } else {
+            ctx.status(400).result("Data parameter is missing");
+        }
     }
 
     public static void reservarSillas(Context ctx) {
         int idEvento = Integer.parseInt(ctx.pathParam("idEvento"));
-        ReservacionJSON reservacion = ctx.bodyAsClass(ReservacionJSON.class);
+        ReservacionJSON reservacion = ctx.bodyAsClass(ReservacionJSON.class
+        );
 
         try {
             boolean isReservacion = eventosDAO.reservarSillas(idEvento, reservacion.getMesa(), reservacion.getSilla());

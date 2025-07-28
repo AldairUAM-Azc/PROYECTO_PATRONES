@@ -22,16 +22,14 @@ public class DatabaseConnection {
 
   public DatabaseConnection() {
     try {
+      connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/reservacion", "root", "root");
 //      connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/reservacion", "root", "Lawbin2328");
-//      connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/reservacion", "root", "root");
-      Class.forName("org.sqlite.JDBC");
-      connection = DriverManager.getConnection("jdbc:sqlite:test.db");
+//      Class.forName("org.sqlite.JDBC");
+//      connection = DriverManager.getConnection("jdbc:sqlite:test.db");
       System.out.println("Connected to DB succesfully");
     } catch (SQLException ex) {
       Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
       throw new Error("Cannot make connection to the database");
-    } catch (ClassNotFoundException ex) {
-      Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
 
@@ -123,6 +121,18 @@ public class DatabaseConnection {
       }
     }
 
+  }
+
+  public PreparedStatement prepareStatement(String query) throws SQLException {
+    return connection.prepareStatement(query);
+  }
+
+  public CallableStatement prepareCall(String query) throws SQLException {
+    return connection.prepareCall(query);
+  }
+
+  public Connection getConnection() {
+    return connection;
   }
 
 }

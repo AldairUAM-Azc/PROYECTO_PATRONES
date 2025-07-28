@@ -3,7 +3,11 @@ package com.restaurante;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.DateTimeException;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +20,14 @@ import java.util.logging.Logger;
  */
 public class Server {
 
-    public static DatabaseConnection dbConn = DatabaseConnection.getInstance();
+    public static EventosDAO eventosDAO = new EventosDAO();
+
+    public Server() {
+    }
 
     public static void listadoDeEventos(Context ctx) {
         try {
-            List<Evento> eventos = dbConn.getAllEventos();
+            List<Evento> eventos = eventosDAO.getAllEventos();
             ctx.json(eventos);
         } catch (SQLException ex) {
             ctx.status(500).result("Error interno del servidor al obtener el listado de eventos");
@@ -28,12 +35,12 @@ public class Server {
     }
 
     public static void evento(Context ctx) {
-//    try {
-//      Evento evento = dbConn.getEventosAllFields();
-//      ctx.json(evento);
-//    } catch (SQLException ex) {
-//      ctx.status(500).result("Error interno del servidor al obtener el evento");
-//    }
+        try {
+            List<Evento> eventos = eventosDAO.getEventos();
+            ctx.json(eventos);
+        } catch (SQLException ex) {
+            ctx.status(500).result("Error interno del servidor al obtener el evento");
+        }
         ctx.result("NO IMPLEMENTADO");
     }
 
@@ -41,7 +48,7 @@ public class Server {
         String nombre = ctx.pathParam("nombre");
 
         try {
-            Evento evento = dbConn.getEventoPorNombre(nombre);
+            Evento evento = eventosDAO.getEventoPorNombre(nombre);
             if (evento == null) {
                 ctx.status(400).result("Evento no encontrado");
             } else {
@@ -54,57 +61,111 @@ public class Server {
     }
 
     public static void estadoSillas(Context ctx) {
-//        System.out.println(ctx.body());
-//        dbConn.estadoSillas();
-//        String query = """ 
-//                   SELECT e.nombre, m.numero AS Mesa, s.letra AS Silla, s.estado , p.precio 
-//                   FROM evento e     
-//                     JOIN precioEvento p ON e.idEvento = p.idEvento    
-//                     JOIN mesa m ON p.idPrecio = m.idPrecio    
-//                     JOIN silla s ON m.idMesa = s.idMesa    
-//                   WHERE e    .idEvento =  ?;""";
-//        ctx.result("sillas " + idEvento);
-//        throw new UnsupportedOperationException("Not implemented yet");
+        int idEvento = -1;
+        try {
+            idEvento = Integer.parseInt(ctx.pathParam("idEvento"));
+        } catch (NumberFormatException ex) {
+            ctx.status(400).result("No event id like that");
+        }
+
+        try {
+            List<EstadoSillas> estadoSillas = eventosDAO.getEstadoSillas(idEvento);
+            ctx.json(estadoSillas);
+        } catch (SQLException ex) {
+            ctx.status(500).result("Error interno del servidor al obtener el listado de eventos");
+        }
     }
 
     public static void crearEvento(Context ctx) {
         String nombre = ctx.formParam("nombre");
-        String fecha = ctx.formParam("fecha");
         String tipo = ctx.formParam("tipo");
-        String precioVIP = ctx.formParam("precio");
-        String precioPreferente = ctx.formParam("precio");
-        String precioGeneral = ctx.formParam("precio");
-        String precioLaterales = ctx.formParam("precio");
+        Date fecha = null;
+        Double precioVIP = -1.0;
+        Double precioPreferente = -1.0;
+        Double precioGeneral = -1.0;
+        Double precioLaterales = -1.0;
+
         try {
-            if (dbConn.crearEvento(nombre, tipo, fecha, precioVIP, precioPreferente, precioGeneral, precioLaterales)) {
+            precioVIP = Double.valueOf(ctx.formParam("precio.VIP"));
+            precioPreferente = Double.valueOf(ctx.formParam("precio.Preferente"));
+            precioGeneral = Double.valueOf(ctx.formParam("precio.General"));
+            precioLaterales = Double.valueOf(ctx.formParam("precio.Laterales"));
+            if (precioVIP < 1.0
+                    || precioPreferente < 1.0
+                    || precioGeneral < 1.0
+                    || precioLaterales < 1.0) {
+                throw new NumberFormatException();
+            }
+            LocalDate fechaDB = LocalDate.parse(ctx.pathParam("fecha"));
+            fecha = Date.valueOf(fechaDB);
+            if (fecha.before(Date.from(Instant.now()))) {
+                throw new DateTimeException("Can't create an event for past days");
+            }
+        } catch (NumberFormatException ex) {
+            ctx.status(400).result("Couldnt create an event with the given parameters.");
+        } catch (DateTimeException ex) {
+            ctx.status(400).result("Could'nt create an event with the given parameters.");
+        }
+
+        try {
+            boolean isEventCreated = eventosDAO.crearEvento(
+                    nombre,
+                    tipo,
+                    fecha,
+                    precioVIP,
+                    precioPreferente,
+                    precioGeneral,
+                    precioLaterales);
+            if (isEventCreated) {
                 ctx.result("Evento agregado ID:");
             } else {
                 ctx.result("Evento no agregado");
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Server.class
+                    .getName()).log(Level.SEVERE, null, ex);
             ctx.status(500).result("Error en el servidor");
         }
     }
 
     public static void sembrado(Context ctx) {
-        String jsonDataString = ctx.formParam("data");
-        ObjectMapper mapper = new ObjectMapper();
-        EventData eventData = null;
-        try {
-            eventData = mapper.readValue(jsonDataString, EventData.class);
-        } catch (JsonProcessingException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            ctx.status(500).result("Error interno del servidor");
-        }
+        String eventDataJsonString = ctx.formParam("data");
+        if (eventDataJsonString != null && !eventDataJsonString.isEmpty()) {
+            ObjectMapper objectMapper = new ObjectMapper();
 
-        String viewName = "templates/" + eventData.getTipo() + ".html";
-        Map<String, Object> model = new HashMap<>();
-        model.put("evento", eventData);
-        ctx.render(viewName, model);
+            try {
+                EventData eventData = objectMapper.readValue(eventDataJsonString, EventData.class);
+                System.out.println(eventData.getIdEvento());
+                System.out.println(eventData.getNombre());
+                System.out.println(eventData.getTipo());
+
+                String viewName = "templates/" + eventData.getTipo() + ".html";
+                Map<String, Object> model = new HashMap<>();
+                model.put("evento", eventData);
+                ctx.render(viewName, model);
+            } catch (JsonProcessingException e) {
+                ctx.status(500).result("Error parsing JSON: " + e.getMessage());
+            }
+        } else {
+            ctx.status(400).result("Data parameter is missing");
+        }
     }
 
     public static void reservarSillas(Context ctx) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        int idEvento = Integer.parseInt(ctx.pathParam("idEvento"));
+        ReservacionJSON reservacion = ctx.bodyAsClass(ReservacionJSON.class
+        );
+
+        try {
+            boolean isReservacion = eventosDAO.reservarSillas(idEvento, reservacion.getMesa(), reservacion.getSilla());
+            if (isReservacion) {
+                ctx.result("Reservacion confirmada.");
+            } else {
+                ctx.result("No se pudo realizar la reservacion");
+            }
+        } catch (SQLException ex) {
+            ctx.status(500).result("Couldn't make reservation");
+        }
     }
 }

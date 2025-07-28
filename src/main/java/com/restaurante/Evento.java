@@ -1,37 +1,80 @@
 package com.restaurante;
 
+import java.util.Date;
+
 /**
  *
  * @author Avalos Albino Aldair Oswaldo 2222005685
  */
 public class Evento {
 
-  private int idEvento;
-  private String nombre;
-  private String tipo;
+    private int idEvento;
+    private String nombre;
+    private int idTipoEvento;
+    private String tipo;
+    private String descripcion;
+    private Date fecha;
 
-  public Evento(int idEvento, String nombre) {
-    this.idEvento = idEvento;
-    this.nombre = nombre;
-  }
+    public Evento() {
+    }
 
-  public Evento(int idEvento, String nombre, String tipo) {
-    this.idEvento = idEvento;
-    this.nombre = nombre;
-    this.tipo = tipo;
-  }
+    public Evento(int idEvento, String nombre) {
+        this.idEvento = idEvento;
+        this.nombre = nombre;
+    }
 
-  // Getters (required for JSON serialization by Javalin/Jackson)
-  public int getIdEvento() {
-    return idEvento;
-  }
+    public Evento(int idEvento, String nombre, String tipo) {
+        this.idEvento = idEvento;
+        this.nombre = nombre;
+        this.tipo = tipo;
+    }
 
-  public String getNombre() {
-    return nombre;
-  }
+    public int getIdEvento() {
+        return idEvento;
+    }
 
-  public String getTipo() {
-    return tipo;
-  }
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setIdEvento(int idEvento) {
+        this.idEvento = idEvento;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public int getIdTipoEvento() {
+        return idTipoEvento;
+    }
+
+    public void setIdTipoEvento(int idTipoEvento) {
+        this.idTipoEvento = idTipoEvento;
+    }
 
 }

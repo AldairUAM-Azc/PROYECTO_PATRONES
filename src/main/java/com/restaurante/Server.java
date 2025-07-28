@@ -60,9 +60,13 @@ public class Server {
     }
 
     public static void estadoSillas(Context ctx) {
-        // this def incorrect, i need to check javalin doc toknow how to get requests params
-//        int idEvento = ctx.body().codePointAt(0);
-        int idEvento = Integer.parseInt(ctx.req().getParameter("idEvento"));
+        int idEvento = -1;
+        try {
+            idEvento = Integer.parseInt(ctx.pathParam("idEvento"));
+        } catch (NumberFormatException ex) {
+            ctx.status(400).result("No event id like that");
+        }
+
         try {
             List<EstadoSillas> estadoSillas = eventosDAO.getEstadoSillas(idEvento);
             ctx.json(estadoSillas);

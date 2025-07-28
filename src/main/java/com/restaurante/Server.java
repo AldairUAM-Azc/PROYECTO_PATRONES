@@ -3,8 +3,11 @@ package com.restaurante;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
+import java.sql.Date;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.time.DateTimeException;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,14 +80,45 @@ public class Server {
 
     public static void crearEvento(Context ctx) {
         String nombre = ctx.formParam("nombre");
-        String fecha = ctx.formParam("fecha");
         String tipo = ctx.formParam("tipo");
-        String precioVIP = ctx.formParam("precio.VIP");
-        String precioPreferente = ctx.formParam("precio.Preferente");
-        String precioGeneral = ctx.formParam("precio.General");
-        String precioLaterales = ctx.formParam("precio.Laterales");
+        Date fecha = null;
+        Double precioVIP = -1.0;
+        Double precioPreferente = -1.0;
+        Double precioGeneral = -1.0;
+        Double precioLaterales = -1.0;
+
         try {
-            if (eventosDAO.crearEvento(nombre, tipo, fecha, precioVIP, precioPreferente, precioGeneral, precioLaterales)) {
+            precioVIP = Double.valueOf(ctx.formParam("precio.VIP"));
+            precioPreferente = Double.valueOf(ctx.formParam("precio.Preferente"));
+            precioGeneral = Double.valueOf(ctx.formParam("precio.General"));
+            precioLaterales = Double.valueOf(ctx.formParam("precio.Laterales"));
+            if (precioVIP < 1.0
+                    || precioPreferente < 1.0
+                    || precioGeneral < 1.0
+                    || precioLaterales < 1.0) {
+                throw new NumberFormatException();
+            }
+            LocalDate fechaDB = LocalDate.parse(ctx.pathParam("fecha"));
+            fecha = Date.valueOf(fechaDB);
+            if (fecha.before(Date.from(Instant.now()))) {
+                throw new DateTimeException("Can't create an event for past days");
+            }
+        } catch (NumberFormatException ex) {
+            ctx.status(400).result("Couldnt create an event with the given parameters.");
+        } catch (DateTimeException ex) {
+            ctx.status(400).result("Could'nt create an event with the given parameters.");
+        }
+
+        try {
+            boolean isEventCreated = eventosDAO.crearEvento(
+                    nombre,
+                    tipo,
+                    fecha,
+                    precioVIP,
+                    precioPreferente,
+                    precioGeneral,
+                    precioLaterales);
+            if (isEventCreated) {
                 ctx.result("Evento agregado ID:");
             } else {
                 ctx.result("Evento no agregado");

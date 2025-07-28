@@ -80,16 +80,23 @@ public class EventosDAO {
         return evento;
     }
 
-    boolean crearEvento(String nombre, String tipo, String fecha, String precioVIP, String precioPreferente, String precioGeneral, String precioLaterales) throws SQLException {
+    boolean crearEvento(
+            String nombre,
+            String tipo,
+            Date fecha,
+            Double precioVIP,
+            Double precioPreferente,
+            Double precioGeneral,
+            Double precioLaterales) throws SQLException {
         String query = "CALL evento" + tipo + "( ? , ? , ? , ? , ? , ? , ? );";
         CallableStatement ps = dbConn.prepareCall(query);
         ps.setString(1, nombre);
         ps.setString(2, tipo);
-        ps.setDate(3, Date.valueOf(fecha));
-        ps.setDouble(4, Float.parseFloat(precioVIP));
-        ps.setDouble(5, Float.parseFloat(precioPreferente));
-        ps.setDouble(6, Float.parseFloat(precioGeneral));
-        ps.setDouble(7, Float.parseFloat(precioLaterales));
+        ps.setDate(3, fecha);
+        ps.setDouble(4, precioVIP);
+        ps.setDouble(5, precioPreferente);
+        ps.setDouble(6, precioGeneral);
+        ps.setDouble(7, precioLaterales);
         return ps.execute();
     }
 

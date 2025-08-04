@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>📝 Agendar Evento</title>
+        <link rel="stylesheet" th:href="@{/css/admin-agendar-evento.css}/>
+              </head>
+              <body>
+              <div class="centrar">
+        <noscript>
+    <p style="text-align: center; color: red;">Este sitio requiere JavaScript para funcionar correctamente.</p>
+    </noscript>
+    <h1>GUI ADMINISTRADOR AGENDAR EVENTOS</h1>
+</div>
+
+<form id="formulario-evento">
+    <div class="form-group">
+        <label for="tipo">Tipo de Evento:</label>
+        <select  name="tipo">
+            <option value="trova">Trova</option>
+            <option value="baile">Baile</option>
+            <option value="general">General</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="nombre">Nombre del Evento:</label>
+        <input type="text"  name="nombre" required>
+    </div>
+
+    <div class="form-group">
+        <label for="descripcion">Descripción:</label>
+        <textarea  name="descripcion" rows="4"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="fecha">Fecha del Evento:</label>
+        <input type="datetime-local"  name="fecha" required>
+    </div>
+
+    <button type="submit">Agendar Evento</button>
+</form>
+
+<section>
+    <!-- Aqui hay que hacer uso del templating para crear los list items. A partir de una coleccion/lista de eventos se generan -->
+    <h2>Lista de Eventos Agendados</h2>
+    <ul id="lista-eventos">
+        <li>Evento 1 Prueba</li> 
+    </ul>
+</section>
+
+<script th:src="@{/js/admin-agendar-evento.js}"></script>
+</body>
+</html>

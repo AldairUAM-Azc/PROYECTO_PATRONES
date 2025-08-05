@@ -10,53 +10,58 @@ package com.restaurante;
  */
 public class EstadoSillas {
 
-    private String eventoNombre;
-    private int mesaNumero;
-    private String sillaLetra;
-    private boolean sillaEstado;
-    private double precio;
+  private String eventoNombre;
+  private int Mesa;
+  private String Silla;
+  private boolean estado;
+  private double precio;
 
-    public EstadoSillas() {
-    }
+  public EstadoSillas() {
+  }
 
-    public String getEventoNombre() {
-        return eventoNombre;
-    }
+  public String getEventoNombre() {
+    return eventoNombre;
+  }
 
-    public void setEventoNombre(String eventoNombre) {
-        this.eventoNombre = eventoNombre;
-    }
+  public void setEventoNombre(String eventoNombre) {
+    this.eventoNombre = eventoNombre;
+  }
 
-    public int getMesaNumero() {
-        return mesaNumero;
-    }
+  public int getMesa() {
+    return Mesa;
+  }
 
-    public void setMesaNumero(int mesaNumero) {
-        this.mesaNumero = mesaNumero;
-    }
+  public void setMesa(int mesaNumero) {
+    this.Mesa = mesaNumero;
+  }
 
-    public String getSillaLetra() {
-        return sillaLetra;
-    }
+  public String getSilla() {
+    return Silla;
+  }
 
-    public void setSillaLetra(String sillaLetra) {
-        this.sillaLetra = sillaLetra;
-    }
+  public void setSilla(String sillaLetra) {
+    this.Silla = sillaLetra;
+  }
 
-    public boolean isSillaEstado() {
-        return sillaEstado;
-    }
+  public boolean isSillaEstado() {
+    return estado;
+  }
 
-    public void setSillaEstado(boolean sillaEstado) {
-        this.sillaEstado = sillaEstado;
-    }
+  public void setSillaEstado(boolean sillaEstado) {
+    this.estado = sillaEstado;
+  }
 
-    public double getPrecio() {
-        return precio;
-    }
+  public double getPrecio() {
+    return precio;
+  }
 
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
+  public void setPrecio(double precio) {
+    this.precio = precio;
+  }
+
+  @Override
+  public String toString() {
+    return "EstadoSillas{" + "eventoNombre=" + eventoNombre + ", mesaNumero=" + Mesa + ", sillaLetra=" + Silla + ", sillaEstado=" + estado + ", precio=" + precio + '}';
+  }
 
 }

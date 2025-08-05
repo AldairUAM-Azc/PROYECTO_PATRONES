@@ -272,14 +272,15 @@ const estadoSilla =
 fetch(`/estado-sillas/${sembrado}`)
 .then(response => response.json())
 .then(data => {
+    console.log(data);
     const lista = document.getElementById('lista-sillas');
     precios = [];
     data.forEach(item => {
         // const li = document.createElement('li');
         //console.log(`Mesa: ${item.Mesa}, Silla: ${item.Silla}, Estado: ${item.estado} Precio: ${item.precio}`);
         const precioSilla = {
-            mesa: item.Mesa,
-            silla: item.Silla,
+            mesa: item.mesa,
+            silla: item.silla,
             precio: item.precio
         };
         precios.push(precioSilla);
@@ -299,6 +300,7 @@ fetch(`/estado-sillas/${sembrado}`)
         }
         // lista.appendChild(li);
     });
+    console.log(precios);
 })
 .catch(error => {
     console.error('Error al cargar datos', error);
@@ -357,7 +359,7 @@ document.querySelector('.confirma-compra').addEventListener('click', function (e
         })
         //fondo.style.display = 'none';
         alert('Reservacion hecha!');
-        document.querySeector('.main-container').style.pointerEvents = 'all';
+        document.querySelector('.main-container').style.pointerEvents = 'all';
         location.reload();
     }
 });

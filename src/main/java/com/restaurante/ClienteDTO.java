@@ -10,6 +10,15 @@ public class ClienteDTO {
   private String nombreCompleto;
   private String telefono;
 
+  public ClienteDTO() {
+  }
+
+  public ClienteDTO(int codigo, String nombreCompleto, String telefono) {
+    this.codigo = codigo;
+    this.nombreCompleto = nombreCompleto;
+    this.telefono = telefono;
+  }
+
   public int getCodigo() {
     return codigo;
   }

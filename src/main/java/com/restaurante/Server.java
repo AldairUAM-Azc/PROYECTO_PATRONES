@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.time.DateTimeException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -245,6 +243,29 @@ public class Server {
     } else {
       ctx.status(200).json(Map.of("message", "Evento actualizado correctamente"));
     }
+  }
 
+  public static void listarReservas(Context ctx) {
+    int idEvento = Integer.parseInt(ctx.pathParam("idEvento"));
+    List<ClienteDTO> listaReservas = eventosDAO.listarReservas(idEvento);
+    String nombreEvento = eventosDAO.getNombreEvento(idEvento);
+    if (nombreEvento.isBlank()) {
+      ctx.status(404).result("Evento no encontrado");
+    }
+    List<ReservacionConBoletosDTO> reservaBoletos = new ArrayList<>();
+    for (ClienteDTO reserva : listaReservas) {
+      int boletos = eventosDAO.countBoletosForReserva(idEvento, reserva.getCodigo());
+      reservaBoletos.add(new ReservacionConBoletosDTO(
+              reserva.getNombreCompleto(),
+              reserva.getTelefono(),
+              reserva.getCodigo(),
+              boletos));
+    }
+
+    Map<String, Object> model = new HashMap<>();
+    model.put("reservas", reservaBoletos);
+    model.put("nombreEvento", nombreEvento);
+
+    ctx.render("views/lista.html", model);
   }
 }

@@ -18,13 +18,13 @@ import java.util.logging.Logger;
  * @author aldair
  */
 public class EventosDAO {
-  
+
   public DatabaseConnection dbConn;
-  
+
   public EventosDAO() {
     dbConn = DatabaseConnection.getInstance();
   }
-  
+
   public List<Evento> getAllEventos() throws SQLException {
     List<Evento> eventos = new ArrayList<>();
     String query = """
@@ -38,12 +38,12 @@ public class EventosDAO {
                       JOIN tipoEvento AS t ON e.idTipoEVento = t.idTipoEvento
                     ORDER BY e.fecha ASC;
                   """;
-    
+
     try {
       PreparedStatement ps = dbConn.prepareStatement(query);
       ResultSet rs = ps.executeQuery();
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
-      
+
       while (rs.next()) {
         int idEvento = rs.getInt("idEvento");
         String nombre = rs.getString("nombre");
@@ -62,11 +62,11 @@ public class EventosDAO {
     }
     return eventos;
   }
-  
+
   public Evento getEventoPorNombre(String targetNombre) throws SQLException {
     Evento evento = new Evento();
     String query = "SELECT * FROM evento WHERE nombre = ?";
-    
+
     try {
       PreparedStatement ps = dbConn.prepareStatement(query);
       ps.setString(1, targetNombre);
@@ -77,7 +77,7 @@ public class EventosDAO {
         int idTipoEvento = rs.getInt("idTipoEvento");
         String descripcion = rs.getString("descripcion");
         Date fecha = rs.getDate("fecha");
-        
+
         evento.setIdEvento(idEvento);
         evento.setNombre(nombre);
         evento.setIdTipoEvento(idTipoEvento);
@@ -89,7 +89,7 @@ public class EventosDAO {
     }
     return evento;
   }
-  
+
   boolean crearEvento(
           String nombre,
           String tipo,
@@ -109,13 +109,13 @@ public class EventosDAO {
     ps.setDouble(7, precioLaterales);
     return ps.execute();
   }
-  
+
   List<Evento> getEventos() throws SQLException {
     List<Evento> eventos = new ArrayList<>();
     String query = "SELECT "
             + "* "
             + "FROM evento";
-    
+
     try {
       PreparedStatement ps = dbConn.prepareStatement(query);
       ResultSet rs = ps.executeQuery();
@@ -138,7 +138,7 @@ public class EventosDAO {
     }
     return eventos;
   }
-  
+
   List<EstadoSillas> getEstadoSillas(int targetIdEvento) throws SQLException {
     List<EstadoSillas> estadoSillasLista = new ArrayList<>();
     String query = """ 
@@ -177,7 +177,7 @@ public class EventosDAO {
     }
     return estadoSillasLista;
   }
-  
+
   public boolean reservarSillas(int codigo, int mesaNumero, int idEvento, String sillaLetra) {
     String query = """
                       UPDATE silla s
@@ -204,7 +204,7 @@ public class EventosDAO {
     }
     return rows > 0;
   }
-  
+
   public List<TipoPrecioDTO> getPrecios(int idEvento) {
     List<TipoPrecioDTO> lista = new ArrayList<>();
     String query = """
@@ -229,13 +229,13 @@ public class EventosDAO {
         dto.setTipo(tipo);
         lista.add(dto);
       }
-      
+
     } catch (SQLException ex) {
       Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
     return lista;
   }
-  
+
   int obtenerConteo(int idEvento) {
     String query = """
                   SELECT 
@@ -261,7 +261,7 @@ public class EventosDAO {
     }
     return cuenta;
   }
-  
+
   boolean insertarReserva(int codigo, String nombreCompleto, String telefono) {
     String query = "INSERT INTO Reserva VALUES( ? , ? , ?)";
     int rows = 0;
@@ -275,7 +275,7 @@ public class EventosDAO {
     }
     return rows > 0;
   }
-  
+
   boolean crearEventoTrova(String nombre, String tipo, LocalDate fecha, PrecioDTO precio) {
     String query = "CALL eventoTrova ( ? , ? , ? , ? , ? , ? , ? );";
     boolean hadResult = false;
@@ -294,7 +294,7 @@ public class EventosDAO {
     }
     return hadResult;
   }
-  
+
   boolean crearEventoGeneral(String nombre, String tipo, LocalDate fecha, PrecioDTO precio) {
     String query = "CALL eventoGeneral ( ? , ? , ? , ? , ? , ? );";
     boolean hadResult = false;
@@ -312,7 +312,7 @@ public class EventosDAO {
     }
     return hadResult;
   }
-  
+
   public boolean eliminarEvento(int idEvento) {
     String query = "DELETE FROM evento WHERE idEvento = ?";
     int rows = 0;
@@ -326,7 +326,7 @@ public class EventosDAO {
     }
     return rows > 0;
   }
-  
+
   public List<EditarEventoDTO> mostrarFormularioEditar(int idEvento) {
     List<EditarEventoDTO> lista = new ArrayList<>();
     String query = """              
@@ -343,7 +343,7 @@ public class EventosDAO {
                   WHERE e.idEvento = ?;
                 """;
     PreparedStatement ps;
-    
+
     try {
       ps = dbConn.prepareStatement(query);
       ps.setInt(1, idEvento);
@@ -361,7 +361,7 @@ public class EventosDAO {
     }
     return lista;
   }
-  
+
   boolean actualizarEvento(String nombre, LocalDate fecha, int idEvento) {
     String query = """
                     UPDATE evento 
@@ -380,7 +380,7 @@ public class EventosDAO {
     }
     return rows > 0;
   }
-  
+
   boolean actualizarPreciosTrova(double vip, double preferente, double general, double laterales, int idEvento) {
     String query = """
                   UPDATE precioEvento
@@ -408,7 +408,7 @@ public class EventosDAO {
     }
     return rows > 0;
   }
-  
+
   boolean actualizarPreciosGeneral(double vip, double preferente, double general, int idEvento) {
     String query = """
                   UPDATE precioEvento
@@ -432,5 +432,82 @@ public class EventosDAO {
       Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
     return rows > 0;
+  }
+
+  public List<ClienteDTO> listarReservas(int idEvento) {
+    List<ClienteDTO> lista = new ArrayList<>();
+    String query = """
+                    SELECT DISTINCT 
+                      r.nombre, 
+                      r.telefono, 
+                      r.codigo 
+                    FROM reserva r
+                      JOIN silla s ON s.codigo = r.codigo
+                      JOIN mesa m ON m.idMesa = s.idMesa
+                      JOIN precioEvento p ON p.idPrecio = m.idPrecio
+                      JOIN evento e ON e.idEvento = p.idEvento
+                    WHERE e.idEvento = ?;                   
+                   """;
+    PreparedStatement ps;
+    try {
+      ps = dbConn.prepareStatement(query);
+      ps.setInt(1, idEvento);
+      ResultSet rs = ps.executeQuery();
+      while (rs.next()) {
+        String nombre = rs.getString("nombre");
+        String telefono = rs.getString("telefono");
+        int codigo = rs.getInt("codigo");
+        lista.add(new ClienteDTO(codigo, nombre, telefono));
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return lista;
+  }
+
+  String getNombreEvento(int idEvento) {
+    String query = "SELECT nombre FROM evento WHERE idEvento = ?";
+    PreparedStatement ps;
+    String nombre = "";
+    try {
+      ps = dbConn.prepareStatement(query);
+      ps.setInt(1, idEvento);
+      ResultSet rs = ps.executeQuery();
+      if (rs.next()) {
+        nombre = rs.getString("nombre");
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return nombre;
+  }
+
+  public int countBoletosForReserva(int idEvento, int codigoReserva) {
+    String queryConteo = """
+            SELECT 
+              COUNT(*) AS boletos 
+            FROM reserva r
+              JOIN silla s ON r.codigo = s.codigo 
+              JOIN mesa m ON m.idMesa = s.idMesa 
+              JOIN precioEvento p ON p.idPrecio = m.idPrecio 
+              JOIN evento e ON e.idEvento = p.idEvento 
+            WHERE 
+              e.idEvento = ? 
+              AND r.codigo = ?;
+                        """;
+
+    PreparedStatement ps;
+    try {
+      ps = dbConn.prepareStatement(queryConteo);
+      ps.setInt(1, idEvento);
+      ps.setInt(2, codigoReserva);
+      ResultSet rs = ps.executeQuery();
+      if (rs.next()) {
+        return rs.getInt("boletos");
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return 0; // Si no se encuentra o hay error, retorna 0 boletos
   }
 }

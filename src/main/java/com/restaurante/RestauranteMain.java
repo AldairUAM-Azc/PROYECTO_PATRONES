@@ -25,6 +25,7 @@ public class RestauranteMain {
     app.delete("/eliminar/{idEvento}", Server::eliminarEvento);
     app.get("/editar/{idEvento}", Server::editar);
     app.put("/cambio/{idEvento}", Server::cambiar);
+    app.get("/lista/{idEvento}", Server::listarReservas);
   }
 
 }

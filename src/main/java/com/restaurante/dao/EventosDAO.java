@@ -2,7 +2,6 @@ package com.restaurante.dao;
 
 import com.restaurante.EstadoSillas;
 import com.restaurante.Evento;
-import com.restaurante.Server;
 import com.restaurante.dto.TipoPrecioDTO;
 import com.restaurante.dto.PrecioDTO;
 import com.restaurante.dto.ClienteDTO;
@@ -65,7 +64,7 @@ public class EventosDAO {
         eventos.add(ev);
       }
     } catch (SQLException ex) {
-      Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
     return eventos;
   }
@@ -92,7 +91,7 @@ public class EventosDAO {
         evento.setFechaDate(fecha);
       }
     } catch (SQLException ex) {
-      Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
     return evento;
   }
@@ -141,7 +140,7 @@ public class EventosDAO {
         eventos.add(ev);
       }
     } catch (SQLException ex) {
-      Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
     return eventos;
   }
@@ -180,7 +179,7 @@ public class EventosDAO {
       }
       return estadoSillasLista;
     } catch (SQLException ex) {
-      Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
     return estadoSillasLista;
   }

@@ -1,7 +1,6 @@
 package com.restaurante.dao;
 
 import com.restaurante.Evento;
-import com.restaurante.Server;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -58,7 +57,7 @@ public class DatabaseConnection {
         eventos.add(new Evento(idEvento, nombre, tipo));
       }
     } catch (SQLException ex) {
-      Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
     }
     return eventos;
   }

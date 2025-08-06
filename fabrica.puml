@@ -1,0 +1,62 @@
+@startuml
+
+class restaurante.EstadoSillas
+class restaurante.EventData
+class restaurante.Evento
+class restaurante.RestauranteMain
+class restaurante.Server
+class restaurante.dao.DatabaseConnection
+class restaurante.dao.EventosDAO
+class restaurante.dto.ClienteDTO
+class restaurante.dto.EditarEventoDTO
+class restaurante.dto.EventoDTO
+class restaurante.dto.MesaSillaDTO
+class restaurante.dto.PrecioDTO
+class restaurante.dto.ReservacionDTO
+class restaurante.dto.TipoPrecioDTO
+
+class restaurante.fabrica.EventoFactoryProducer
+class restaurante.fabrica.GeneralEventoFactory
+class restaurante.fabrica.TrovaEventoFactory
+
+
+interface restaurante.fabrica.EventoFactory
+
+
+
+restaurante.Server ..> restaurante.dao.EventosDAO
+
+restaurante.Server ..> restaurante.dto.ClienteDTO
+restaurante.Server ..> restaurante.dto.EditarEventoDTO
+restaurante.Server ..> restaurante.dto.EventoDTO
+restaurante.Server ..> restaurante.dto.PrecioDTO
+restaurante.Server ..> restaurante.dto.ReservacionDTO
+restaurante.Server ..> restaurante.dto.TipoPrecioDTO
+
+restaurante.Server ..> restaurante.fabrica.EventoFactoryProducer
+restaurante.Server ..> restaurante.fabrica.EventoFactory
+
+restaurante.dao.DatabaseConnection ..> restaurante.Evento
+
+restaurante.dao.EventosDAO ..> restaurante.EstadoSillas
+restaurante.dao.EventosDAO ..> restaurante.Evento
+restaurante.dao.EventosDAO ..> restaurante.dto.ClienteDTO
+restaurante.dao.EventosDAO ..> restaurante.dto.EditarEventoDTO
+restaurante.dao.EventosDAO ..> restaurante.dto.PrecioDTO
+restaurante.dao.EventosDAO ..> restaurante.dto.TipoPrecioDTO
+
+
+
+restaurante.fabrica.EventoFactoryProducer ..> restaurante.dao.EventosDAO
+restaurante.fabrica.GeneralEventoFactory ..> restaurante.dao.EventosDAO
+restaurante.fabrica.GeneralEventoFactory ..> restaurante.dto.PrecioDTO
+
+restaurante.fabrica.GeneralEventoFactory --|> restaurante.fabrica.EventoFactory
+
+restaurante.fabrica.TrovaEventoFactory ..> restaurante.dao.EventosDAO
+restaurante.fabrica.TrovaEventoFactory ..> restaurante.dto.PrecioDTO
+
+restaurante.fabrica.TrovaEventoFactory --|> restaurante.fabrica.EventoFactory
+restaurante.fabrica.EventoFactory ..> restaurante.dto.PrecioDTO
+
+@enduml

@@ -173,4 +173,13 @@ public class Server {
     }
     ctx.status(200).json(Map.of("message", "Reserva realizada correctamente"));
   }
+
+  public static void eliminarEvento(Context ctx) {
+    int idEvento = Integer.parseInt(ctx.pathParam("idEvento"));
+    boolean fueEliminado = eventosDAO.eliminarEvento(idEvento);
+    if (!fueEliminado) {
+      ctx.status(404).json(Map.of("message", "No se elimino ningun evento"));
+    }
+    ctx.status(200).json(Map.of("message", "Evento eliminado correctamente!"));
+  }
 }

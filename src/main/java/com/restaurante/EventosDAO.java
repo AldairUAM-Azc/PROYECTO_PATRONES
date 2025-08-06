@@ -312,4 +312,18 @@ public class EventosDAO {
     }
     return hadResult;
   }
+
+  public boolean eliminarEvento(int idEvento) {
+    String query = "DELETE FROM evento WHERE idEvento = ?";
+    int rows = 0;
+    PreparedStatement ps;
+    try {
+      ps = dbConn.prepareStatement(query);
+      ps.setInt(1, idEvento);
+      rows = ps.executeUpdate();
+    } catch (SQLException ex) {
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return rows > 0;
+  }
 }

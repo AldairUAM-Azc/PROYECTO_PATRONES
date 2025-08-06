@@ -19,11 +19,11 @@ public class EstadoSillas {
   public EstadoSillas() {
   }
 
-  public String getEventoNombre() {
+  public String getNombre() {
     return eventoNombre;
   }
 
-  public void setEventoNombre(String eventoNombre) {
+  public void setNombre(String eventoNombre) {
     this.eventoNombre = eventoNombre;
   }
 
@@ -43,11 +43,11 @@ public class EstadoSillas {
     this.Silla = sillaLetra;
   }
 
-  public boolean isSillaEstado() {
+  public boolean isEstado() {
     return estado;
   }
 
-  public void setSillaEstado(boolean sillaEstado) {
+  public void setEstado(boolean sillaEstado) {
     this.estado = sillaEstado;
   }
 

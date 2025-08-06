@@ -16,19 +16,20 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import kotlin.collections.ArrayDeque;
 
 /**
  *
  * @author aldair
  */
 public class EventosDAO {
-  
+
   public DatabaseConnection dbConn;
-  
+
   public EventosDAO() {
     dbConn = DatabaseConnection.getInstance();
   }
-  
+
   public List<Evento> getAllEventos() throws SQLException {
     List<Evento> eventos = new ArrayList<>();
     String query = """
@@ -42,12 +43,12 @@ public class EventosDAO {
                       JOIN tipoEvento AS t ON e.idTipoEVento = t.idTipoEvento
                     ORDER BY e.fecha ASC;
                   """;
-    
+
     try {
       PreparedStatement ps = dbConn.prepareStatement(query);
       ResultSet rs = ps.executeQuery();
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
-      
+
       while (rs.next()) {
         int idEvento = rs.getInt("idEvento");
         String nombre = rs.getString("nombre");
@@ -66,11 +67,11 @@ public class EventosDAO {
     }
     return eventos;
   }
-  
+
   public Evento getEventoPorNombre(String targetNombre) throws SQLException {
     Evento evento = new Evento();
     String query = "SELECT * FROM evento WHERE nombre = ?";
-    
+
     try {
       PreparedStatement ps = dbConn.prepareStatement(query);
       ps.setString(1, targetNombre);
@@ -81,7 +82,7 @@ public class EventosDAO {
         int idTipoEvento = rs.getInt("idTipoEvento");
         String descripcion = rs.getString("descripcion");
         Date fecha = rs.getDate("fecha");
-        
+
         evento.setIdEvento(idEvento);
         evento.setNombre(nombre);
         evento.setIdTipoEvento(idTipoEvento);
@@ -93,7 +94,7 @@ public class EventosDAO {
     }
     return evento;
   }
-  
+
   boolean crearEvento(
           String nombre,
           String tipo,
@@ -113,13 +114,13 @@ public class EventosDAO {
     ps.setDouble(7, precioLaterales);
     return ps.execute();
   }
-  
+
   List<Evento> getEventos() throws SQLException {
     List<Evento> eventos = new ArrayList<>();
     String query = "SELECT "
             + "* "
             + "FROM evento";
-    
+
     try {
       PreparedStatement ps = dbConn.prepareStatement(query);
       ResultSet rs = ps.executeQuery();
@@ -142,7 +143,7 @@ public class EventosDAO {
     }
     return eventos;
   }
-  
+
   List<EstadoSillas> getEstadoSillas(int targetIdEvento) throws SQLException {
     List<EstadoSillas> estadoSillasLista = new ArrayList<>();
     String query = """ 
@@ -168,10 +169,10 @@ public class EventosDAO {
         boolean sillaEstado = rs.getBoolean("estadO");
         double precio = rs.getDouble("precio");
         EstadoSillas estadoSillas = new EstadoSillas();
-        estadoSillas.setEventoNombre(eventoNombre);
+        estadoSillas.setNombre(eventoNombre);
         estadoSillas.setMesa(mesaNumero);
         estadoSillas.setSilla(sillaLetra);
-        estadoSillas.setSillaEstado(sillaEstado);
+        estadoSillas.setEstado(sillaEstado);
         estadoSillas.setPrecio(precio);
         estadoSillasLista.add(estadoSillas);
       }
@@ -181,7 +182,7 @@ public class EventosDAO {
     }
     return estadoSillasLista;
   }
-  
+
   public boolean reservarSillas(int idEvento, int mesaNumero, String sillaLetra) throws SQLException {
     String query = """
                         UPDATE silla s
@@ -199,5 +200,36 @@ public class EventosDAO {
     ps.setString(3, sillaLetra);
     int rowcount = ps.executeUpdate();
     return rowcount > 0;
+  }
+
+  public List<TipoPrecioDTO> getPrecios(int idEvento) {
+    List<TipoPrecioDTO> lista = new ArrayList<>();
+    String query = """
+                  SELECT 
+                    t.tipo, 
+                    p.precio
+                  FROM precioEvento p
+                       JOIN tipoMesa t ON t.idTipoMesa = p.idTipoMesa
+                       JOIN evento e ON p.idEvento = e.idEvento
+                  WHERE e.idEvento = ?; 
+                  """;
+    PreparedStatement ps;
+    try {
+      ps = dbConn.prepareStatement(query);
+      ps.setInt(1, idEvento);
+      ResultSet rs = ps.executeQuery();
+      while (rs.next()) {
+        String tipo = rs.getString("tipo");
+        double precio = rs.getDouble("precio");
+        TipoPrecioDTO dto = new TipoPrecioDTO();
+        dto.setPrecio(precio);
+        dto.setTipo(tipo);
+        lista.add(dto);
+      }
+
+    } catch (SQLException ex) {
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return lista;
   }
 }

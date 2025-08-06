@@ -18,6 +18,7 @@ public class RestauranteMain {
         app.post("/crearEvento", Server::crearEvento);
         app.post("/sembrado/{nombre}", Server::sembrado);
         app.put("/reservar/{idEvento}", Server::reservarSillas);
+        app.get("/precios/{idEvento}", Server::getPrecios);
 
     }
 

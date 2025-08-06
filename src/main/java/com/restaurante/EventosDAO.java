@@ -232,4 +232,30 @@ public class EventosDAO {
     }
     return lista;
   }
+
+  int obtenerConteo(int idEvento) {
+    String query = """
+                  SELECT 
+                    COUNT(*) AS numero
+                  FROM silla s
+                    JOIN mesa m ON m.idMesa = s.idMesa
+                    JOIN precioEvento p ON p.idPrecio = m.idPrecio
+                    JOIN evento e ON e.idEvento = p.idEvento
+                  WHERE 
+                    estado = true AND e.idEvento = ?
+                   """;
+    PreparedStatement ps;
+    int cuenta = 0;
+    try {
+      ps = dbConn.prepareStatement(query);
+      ps.setInt(1, idEvento);
+      ResultSet rs = ps.executeQuery();
+      if (rs.next()) {
+        cuenta = rs.getInt("numero");
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return cuenta;
+  }
 }

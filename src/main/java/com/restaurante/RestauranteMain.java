@@ -20,6 +20,7 @@ public class RestauranteMain {
     app.put("/reservar/{idEvento}", Server::reservarSillas);
     app.get("/precios/{idEvento}", Server::getPrecios);
     app.post("/datos", Server::getDatos);
+    app.get("/conteo/{idEvento}", Server::getConteo);
   }
 
 }

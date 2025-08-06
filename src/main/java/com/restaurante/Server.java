@@ -186,4 +186,10 @@ public class Server {
       Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
+
+  public static void getConteo(Context ctx) {
+    int idEvento = Integer.parseInt(ctx.pathParam("idEvento"));
+    int conteo = eventosDAO.obtenerConteo(idEvento);
+    ctx.json(Map.of("conteo", conteo));
+  }
 }

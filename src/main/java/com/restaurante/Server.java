@@ -71,55 +71,27 @@ public class Server {
   }
 
   public static void crearEvento(Context ctx) {
-    String nombre = ctx.formParam("nombre");
-    String tipo = ctx.formParam("tipo");
-    Date fecha = null;
-    Double precioVIP = -1.0;
-    Double precioPreferente = -1.0;
-    Double precioGeneral = -1.0;
-    Double precioLaterales = -1.0;
+    EventoDTO dto = ctx.bodyAsClass(EventoDTO.class);
+    System.out.println(dto);
+    String nombre = dto.getNombre();
+    String tipo = dto.getTipo();
+    LocalDate fecha = dto.getFecha();
+    PrecioDTO precio = dto.getPrecio();
 
-    try {
-      precioVIP = Double.valueOf(ctx.formParam("precio.VIP"));
-      precioPreferente = Double.valueOf(ctx.formParam("precio.Preferente"));
-      precioGeneral = Double.valueOf(ctx.formParam("precio.General"));
-      precioLaterales = Double.valueOf(ctx.formParam("precio.Laterales"));
-      if (precioVIP < 1.0
-              || precioPreferente < 1.0
-              || precioGeneral < 1.0
-              || precioLaterales < 1.0) {
-        throw new NumberFormatException();
+    if (tipo.equals("Trova")) {
+      boolean eventoCreado = eventosDAO.crearEventoTrova(nombre, tipo, fecha, precio);
+      if (!eventoCreado) {
+        ctx.status(500).result("Error en el servidor");
       }
-      LocalDate fechaDB = LocalDate.parse(ctx.pathParam("fecha"));
-      fecha = Date.valueOf(fechaDB);
-      if (fecha.before(Date.from(Instant.now()))) {
-        throw new DateTimeException("Can't create an event for past days");
-      }
-    } catch (NumberFormatException ex) {
-      ctx.status(400).result("Couldnt create an event with the given parameters.");
-    } catch (DateTimeException ex) {
-      ctx.status(400).result("Could'nt create an event with the given parameters.");
+      ctx.result("Evento de " + nombre + " agregado");
     }
 
-    try {
-      boolean isEventCreated = eventosDAO.crearEvento(
-              nombre,
-              tipo,
-              fecha,
-              precioVIP,
-              precioPreferente,
-              precioGeneral,
-              precioLaterales);
-      if (isEventCreated) {
-        ctx.result("Evento agregado ID:");
-      } else {
-        ctx.result("Evento no agregado");
-
+    if (tipo.equals("General")) {
+      boolean eventoCreado = eventosDAO.crearEventoGeneral(nombre, tipo, fecha, precio);
+      if (!eventoCreado) {
+        ctx.status(500).result("Error en el servidor");
       }
-    } catch (SQLException ex) {
-      Logger.getLogger(Server.class
-              .getName()).log(Level.SEVERE, null, ex);
-      ctx.status(500).result("Error en el servidor");
+      ctx.result("Evento de " + nombre + " agregado");
     }
   }
 

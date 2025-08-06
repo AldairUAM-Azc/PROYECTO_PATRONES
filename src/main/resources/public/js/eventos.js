@@ -48,22 +48,22 @@ document.getElementById('nuevo-evento').addEventListener('submit', (event) =>{
     const fecha = document.getElementById('fecha').value;
     const tipo = tipoEvento;
     let precios;
-    if(tipo == "Trova"){
+    if(tipo === "Trova"){
         const evento = document.querySelector('.evento.trova');    
         precios = {
-            VIP: evento.querySelector('input[name="VIP"]').value,
-            Preferente: evento.querySelector('input[name="Preferente"]').value,
-            General: evento.querySelector('input[name="General"]').value,
-            Laterales: evento.querySelector('input[name="Laterales"]').value
+            vip: evento.querySelector('input[name="VIP"]').value,
+            preferente: evento.querySelector('input[name="Preferente"]').value,
+            general: evento.querySelector('input[name="General"]').value,
+            laterales: evento.querySelector('input[name="Laterales"]').value
         };
         //console.log(`VIP: ${VIP} Preferente: ${Preferente} General: ${General} Laterales: ${Laterales}`);
     }
-    if(tipo == "General"){
+    if(tipo === "General"){
         const evento = document.querySelector('.evento.general');
         precios = {
-            VIP: evento.querySelector('input[name="VIP"]').value,
-            Preferente: evento.querySelector('input[name="Preferente"]').value,
-            General: evento.querySelector('input[name="General"]').value
+            vip: evento.querySelector('input[name="VIP"]').value,
+            preferente: evento.querySelector('input[name="Preferente"]').value,
+            general: evento.querySelector('input[name="General"]').value
         };
         //console.log(`VIP: ${VIP} Preferente: ${Preferente} General: ${General} Laterales: ${Laterales}`);
     }

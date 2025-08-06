@@ -275,4 +275,41 @@ public class EventosDAO {
     }
     return rows > 0;
   }
+
+  boolean crearEventoTrova(String nombre, String tipo, LocalDate fecha, PrecioDTO precio) {
+    String query = "CALL eventoTrova ( ? , ? , ? , ? , ? , ? , ? );";
+    boolean hadResult = false;
+    try {
+      CallableStatement cs = dbConn.prepareCall(query);
+      cs.setString(1, nombre);
+      cs.setString(2, tipo);
+      cs.setDate(3, Date.valueOf(fecha));
+      cs.setDouble(4, precio.getVIP());
+      cs.setDouble(5, precio.getPreferente());
+      cs.setDouble(6, precio.getGeneral());
+      cs.setDouble(7, precio.getLaterales());
+      hadResult = cs.execute();
+    } catch (SQLException ex) {
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return hadResult;
+  }
+
+  boolean crearEventoGeneral(String nombre, String tipo, LocalDate fecha, PrecioDTO precio) {
+    String query = "CALL eventoGeneral ( ? , ? , ? , ? , ? , ? );";
+    boolean hadResult = false;
+    try {
+      CallableStatement cs = dbConn.prepareCall(query);
+      cs.setString(1, nombre);
+      cs.setString(2, tipo);
+      cs.setDate(3, Date.valueOf(fecha));
+      cs.setDouble(4, precio.getVIP());
+      cs.setDouble(5, precio.getPreferente());
+      cs.setDouble(6, precio.getGeneral());
+      hadResult = cs.execute();
+    } catch (SQLException ex) {
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return hadResult;
+  }
 }

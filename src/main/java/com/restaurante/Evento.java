@@ -8,73 +8,82 @@ import java.util.Date;
  */
 public class Evento {
 
-    private int idEvento;
-    private String nombre;
-    private int idTipoEvento;
-    private String tipo;
-    private String descripcion;
-    private Date fecha;
+  private int idEvento;
+  private String nombre;
+  private int idTipoEvento;
+  private String tipo;
+  private String descripcion;
+  private Date fecha;
+  private String fechaFormateada;
 
-    public Evento() {
-    }
+  public Evento() {
+  }
 
-    public Evento(int idEvento, String nombre) {
-        this.idEvento = idEvento;
-        this.nombre = nombre;
-    }
+  public Evento(int idEvento, String nombre) {
+    this.idEvento = idEvento;
+    this.nombre = nombre;
+  }
 
-    public Evento(int idEvento, String nombre, String tipo) {
-        this.idEvento = idEvento;
-        this.nombre = nombre;
-        this.tipo = tipo;
-    }
+  public Evento(int idEvento, String nombre, String tipo) {
+    this.idEvento = idEvento;
+    this.nombre = nombre;
+    this.tipo = tipo;
+  }
 
-    public int getIdEvento() {
-        return idEvento;
-    }
+  public int getIdEvento() {
+    return idEvento;
+  }
 
-    public String getNombre() {
-        return nombre;
-    }
+  public String getNombre() {
+    return nombre;
+  }
 
-    public String getTipo() {
-        return tipo;
-    }
+  public String getTipo() {
+    return tipo;
+  }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+  public String getDescripcion() {
+    return descripcion;
+  }
 
-    public Date getFecha() {
-        return fecha;
-    }
+  public Date getFechaDate() {
+    return fecha;
+  }
 
-    public void setIdEvento(int idEvento) {
-        this.idEvento = idEvento;
-    }
+  public void setIdEvento(int idEvento) {
+    this.idEvento = idEvento;
+  }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
+  }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+  public void setTipo(String tipo) {
+    this.tipo = tipo;
+  }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+  public void setDescripcion(String descripcion) {
+    this.descripcion = descripcion;
+  }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
+  public void setFechaDate(Date fecha) {
+    this.fecha = fecha;
+  }
 
-    public int getIdTipoEvento() {
-        return idTipoEvento;
-    }
+  public int getIdTipoEvento() {
+    return idTipoEvento;
+  }
 
-    public void setIdTipoEvento(int idTipoEvento) {
-        this.idTipoEvento = idTipoEvento;
-    }
+  public void setIdTipoEvento(int idTipoEvento) {
+    this.idTipoEvento = idTipoEvento;
+  }
+
+  public String getFecha() {
+    return fechaFormateada;
+  }
+
+  public void setFecha(String fechaFormateada) {
+    this.fechaFormateada = fechaFormateada;
+  }
 
 }

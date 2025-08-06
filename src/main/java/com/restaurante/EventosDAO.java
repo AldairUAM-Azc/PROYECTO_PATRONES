@@ -10,7 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,36 +22,43 @@ import java.util.logging.Logger;
  * @author aldair
  */
 public class EventosDAO {
-
+  
   public DatabaseConnection dbConn;
-
+  
   public EventosDAO() {
     dbConn = DatabaseConnection.getInstance();
   }
-
+  
   public List<Evento> getAllEventos() throws SQLException {
     List<Evento> eventos = new ArrayList<>();
     String query = """
                     SELECT 
                       e.idEvento AS idEvento,
                       e.nombre AS nombre,
-                      t.tipo AS tipo
+                      t.tipo AS tipo,
+                      e.fecha AS fecha
                     FROM 
                       evento AS e 
                       JOIN tipoEvento AS t ON e.idTipoEVento = t.idTipoEvento
+                    ORDER BY e.fecha ASC;
                   """;
-
+    
     try {
       PreparedStatement ps = dbConn.prepareStatement(query);
       ResultSet rs = ps.executeQuery();
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
+      
       while (rs.next()) {
         int idEvento = rs.getInt("idEvento");
         String nombre = rs.getString("nombre");
         String tipo = rs.getString("tipo");
+        LocalDate fechaCruda = rs.getDate("fecha").toLocalDate();
+        String fechaFormateada = fechaCruda.format(formatter);
         Evento ev = new Evento();
         ev.setIdEvento(idEvento);
         ev.setNombre(nombre);
         ev.setTipo(tipo);
+        ev.setFecha(fechaFormateada);
         eventos.add(ev);
       }
     } catch (SQLException ex) {
@@ -56,11 +66,11 @@ public class EventosDAO {
     }
     return eventos;
   }
-
+  
   public Evento getEventoPorNombre(String targetNombre) throws SQLException {
     Evento evento = new Evento();
     String query = "SELECT * FROM evento WHERE nombre = ?";
-
+    
     try {
       PreparedStatement ps = dbConn.prepareStatement(query);
       ps.setString(1, targetNombre);
@@ -71,19 +81,19 @@ public class EventosDAO {
         int idTipoEvento = rs.getInt("idTipoEvento");
         String descripcion = rs.getString("descripcion");
         Date fecha = rs.getDate("fecha");
-
+        
         evento.setIdEvento(idEvento);
         evento.setNombre(nombre);
         evento.setIdTipoEvento(idTipoEvento);
         evento.setDescripcion(descripcion);
-        evento.setFecha(fecha);
+        evento.setFechaDate(fecha);
       }
     } catch (SQLException ex) {
       Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
     }
     return evento;
   }
-
+  
   boolean crearEvento(
           String nombre,
           String tipo,
@@ -103,13 +113,13 @@ public class EventosDAO {
     ps.setDouble(7, precioLaterales);
     return ps.execute();
   }
-
+  
   List<Evento> getEventos() throws SQLException {
     List<Evento> eventos = new ArrayList<>();
     String query = "SELECT "
             + "* "
             + "FROM evento";
-
+    
     try {
       PreparedStatement ps = dbConn.prepareStatement(query);
       ResultSet rs = ps.executeQuery();
@@ -124,7 +134,7 @@ public class EventosDAO {
         ev.setNombre(nombre);
         ev.setIdEvento(idTipoEvento);
         ev.setDescripcion(descripcion);
-        ev.setFecha(fecha);
+        ev.setFechaDate(fecha);
         eventos.add(ev);
       }
     } catch (SQLException ex) {
@@ -132,7 +142,7 @@ public class EventosDAO {
     }
     return eventos;
   }
-
+  
   List<EstadoSillas> getEstadoSillas(int targetIdEvento) throws SQLException {
     List<EstadoSillas> estadoSillasLista = new ArrayList<>();
     String query = """ 
@@ -171,7 +181,7 @@ public class EventosDAO {
     }
     return estadoSillasLista;
   }
-
+  
   public boolean reservarSillas(int idEvento, int mesaNumero, String sillaLetra) throws SQLException {
     String query = """
                         UPDATE silla s

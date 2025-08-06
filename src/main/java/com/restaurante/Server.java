@@ -142,7 +142,8 @@ public class Server {
 //        System.out.println(eventData.getNombre());
 //        System.out.println(eventData.getTipo());
 
-        String viewName = "templates/" + eventData.getTipo() + ".html";
+//        String viewName = "templates/" + eventData.getTipo() + ".html";
+        String viewName = "views/" + eventData.getTipo() + ".html";
 //        System.out.println(viewName);
         Map<String, Object> model = new HashMap<>();
         model.put("evento", eventData);

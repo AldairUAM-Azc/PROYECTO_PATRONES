@@ -278,15 +278,15 @@ fetch(`/estado-sillas/${sembrado}`)
         // const li = document.createElement('li');
         //console.log(`Mesa: ${item.Mesa}, Silla: ${item.Silla}, Estado: ${item.estado} Precio: ${item.precio}`);
         const precioSilla = {
-            mesa: item.Mesa,
-            silla: item.Silla,
+            mesa: item.mesa,
+            silla: item.silla,
             precio: item.precio
         };
         precios.push(precioSilla);
         if(item.estado){
-            const mesa = document.getElementById(`${item.Mesa}`);
+            const mesa = document.getElementById(`${item.mesa}`);
             const table = mesa.closest('.table-wrapper');
-            switch(item.Silla){
+            switch(item.silla){
                 case 'A': table.querySelector('#A').classList.toggle('ocupada');
                     break;
                 case 'B': table.querySelector('#B').classList.toggle('ocupada');

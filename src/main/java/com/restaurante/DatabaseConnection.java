@@ -22,7 +22,9 @@ public class DatabaseConnection {
 
   public DatabaseConnection() {
     try {
-      connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/reservacion", "root", "root");
+//      connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/reservacion", "root", "root");
+      connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/reservacion", "aldair", "aldair");
+
 //      connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/reservacion", "root", "Lawbin2328");
 //      Class.forName("org.sqlite.JDBC");
 //      connection = DriverManager.getConnection("jdbc:sqlite:test.db");

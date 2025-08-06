@@ -47,20 +47,20 @@ document.getElementById('editar-evento').addEventListener('submit', (event) =>{
     let precios;
     if(tipo === "Trova"){
         precios = {
-            VIP: document.querySelector('input[name="precio-0"]').value,
-            Preferente: document.querySelector('input[name="precio-1"]').value,
-            General: document.querySelector('input[name="precio-2"]').value,
-            Laterales: document.querySelector('input[name="precio-3"]').value
+            vip: document.querySelector('input[name="precio-0"]').value,
+            preferente: document.querySelector('input[name="precio-1"]').value,
+            general: document.querySelector('input[name="precio-2"]').value,
+            laterales: document.querySelector('input[name="precio-3"]').value
         };
-        console.log(`VIP: ${precios.VIP} Preferente: ${precios.Preferente} General: ${precios.General} Laterales: ${precios.Laterales}`);
+        console.log(`VIP: ${precios.vip} Preferente: ${precios.preferente} General: ${precios.general} Laterales: ${precios.laterales}`);
     }
     if(tipo === "General"){
         precios = {
-            VIP: document.querySelector('input[name="precio-0"]').value,
-            Preferente: document.querySelector('input[name="precio-1"]').value,
-            General: document.querySelector('input[name="precio-2"]').value,
+            vip: document.querySelector('input[name="precio-0"]').value,
+            preferente: document.querySelector('input[name="precio-1"]').value,
+            general: document.querySelector('input[name="precio-2"]').value,
         };
-        console.log(`VIP: ${precios.VIP} Preferente: ${precios.Preferente} General: ${precios.General}`);
+        console.log(`VIP: ${precios.vip} Preferente: ${precios.preferente} General: ${precios.general}`);
     }
 
     console.log(`nombre: ${nombre} fecha: ${fecha} tipo: ${tipo}`);

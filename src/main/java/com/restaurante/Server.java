@@ -199,15 +199,52 @@ public class Server {
     for (EditarEventoDTO row : lista) {
       preciosParaVista.add(new TipoPrecioDTO(row.getTipoEvento(), row.getPrecio()));
     }
-    
+
     Map<String, Object> model = new HashMap<>();
     model.put("idEvento", idEvento);
     model.put("nombreEvento", nombreEvento);
     model.put("fechaEvento", Date.valueOf(fechaEvento));
     model.put("precios", preciosParaVista);
     model.put("tipoEvento", tipoEvento);
-    
+
     ctx.render("views/editarEvento.html", model);
+  }
+
+  public static void cambiar(Context ctx) {
+    int idEvento = Integer.parseInt(ctx.pathParam("idEvento"));
+    EventoDTO dto = ctx.bodyAsClass(EventoDTO.class);
+    System.out.println("DTO " + dto);
+
+    boolean actualizado = eventosDAO.actualizarEvento(dto.getNombre(), dto.getFecha(), idEvento);
+    if (!actualizado) {
+      System.err.println("Error al actualizar el evento");
+      ctx.status(500).json(Map.of("error", "Error al actualizar los datos del evento"));
+    }
+
+    if (dto.getTipo().equals("Trova")) {
+      PrecioDTO precios = dto.getPrecio();
+      double vip = precios.getVIP();
+      double preferente = precios.getPreferente();
+      double general = precios.getGeneral();
+      double laterales = precios.getLaterales();
+      boolean preciosActualizados = eventosDAO.actualizarPreciosTrova(vip, preferente, general, laterales, idEvento);
+      if (!preciosActualizados) {
+        ctx.status(404).json(Map.of("message", "No se encontró el registro de precio para el evento"));
+      }
+      ctx.status(200).json(Map.of("message", "Reserva realizada correctamente"));
+    } else if (dto.getTipo().equals("General")) {
+      PrecioDTO precios = dto.getPrecio();
+      double vip = precios.getVIP();
+      double preferente = precios.getPreferente();
+      double general = precios.getGeneral();
+      boolean preciosActualizados = eventosDAO.actualizarPreciosGeneral(vip, preferente, general, idEvento);
+      if (!preciosActualizados) {
+        ctx.status(404).json(Map.of("message", "No se encontró el registro de precio para el evento"));
+      }
+      ctx.status(200).json(Map.of("message", "Reserva realizada correctamente"));
+    } else {
+      ctx.status(200).json(Map.of("message", "Evento actualizado correctamente"));
+    }
 
   }
 }

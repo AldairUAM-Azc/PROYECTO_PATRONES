@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escenario Musical</title>
+    <style>
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .main-container {
+            display: grid;
+            grid-template-areas:
+                "general-izq escenario general-der"
+                "general-izq vip general-der"
+                "footer footer footer";
+            gap: 20px;
+        }
+        
+        .general, .escenario, .centro {
+            padding: 10px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        .general {
+            display: grid;
+            grid-template-columns: repeat(3, auto); /* Dos columnas */
+            grid-auto-rows: auto; /* Altura automática de las filas */
+            gap: 20px; /* Espacio entre mesas */
+            align-items: start; /* Alinear al inicio verticalmente */
+            justify-content: center;         
+        }   
+        
+        .escenario {
+            grid-area: escenario;
+            text-align: center;
+            font-weight: bold;
+            background: #e5ceb9;
+            padding: 20px;
+        }
+        
+        .izq {
+            grid-area: general-izq;
+        }
+        
+        .der {
+            grid-area: general-der;
+        }
+        
+        .centro {
+            grid-area: vip;
+            display: grid;
+            grid-template-columns: repeat(6, auto);
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .table-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .table {
+            width: 40px;
+            height: 40px;
+            background-color: #007bff;
+            transform: rotate(45deg);
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        
+        .chair {
+            width: 14px;
+            height: 14px;
+            background-color: #8B4513;
+            position: absolute;
+            border-radius: 2px;
+            border: 1px solid #654321;
+            box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .chair:nth-child(5) { top: 0; left: 0; transform: translateY(60%) translateX(20%) rotate(45deg); }
+        .chair:nth-child(2) { right: 0; top: 0; transform: translateY(60%) translateX(-20%) rotate(45deg); }
+        .chair:nth-child(3) { bottom: 0; left: 0; transform: translateY(-60%) translateX(20%) rotate(45deg); }
+        .chair:nth-child(4) { right: 0; bottom: 0; transform: translateY(-60%) translateX(-20%) rotate(45deg); }
+        
+        .footer {
+            grid-area: footer;
+            background-color: lightgray;
+            padding: 10px;
+            text-align: center;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mensaje para usuarios sin JavaScript habilitado -->
+    <noscript>
+        <p style="text-align: center; color: red;">Este sitio requiere JavaScript para funcionar correctamente.</p>
+    </noscript>
+
+    <!-- Título principal -->
+    <h1>Mapa de Mesas</h1>
+
+    <div class="main-container">
+        <!-- Sección General Izquierda -->
+        <div class="general izq">
+            <h2 style="grid-column: 1 / -1; text-align: center;">General Izquierda</h2>
+        </div>
+
+        <!-- Escenario -->
+        <div class="escenario">Escenario Musical</div>
+
+        <!-- Sección General Derecha -->
+        <div class="general der">
+            <h2 style="grid-column: 1 / -1; text-align: center;">General Derecha</h2>
+        </div>
+
+        <!-- Sección VIP -->
+        <div class="centro">
+            <h2 style="grid-column: 1 / -1; text-align: center;">Zona VIP</h2>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">Palmeras y zonas adicionales</div>
+    </div>
+
+    <script>
+        function generateTables(container, totalTables, tablesPerColumn) {
+        for (let col = 0; col < Math.ceil(totalTables / tablesPerColumn); col++) {
+            // Crear un contenedor para la columna
+            const column = document.createElement('div');
+            column.style.display = 'grid';
+            column.style.gridTemplateRows = `repeat(${tablesPerColumn}, auto)`;
+            column.style.gap = '20px';
+
+            for (let i = 0; i < tablesPerColumn; i++) {
+                const tableIndex = col * tablesPerColumn + i; // Índice global de la mesa
+                if (tableIndex >= totalTables) break; // No generar más mesas si excede el total
+
+                const tableWrapper = document.createElement('div');
+                tableWrapper.classList.add('table-wrapper');
+
+                const table = document.createElement('div');
+                table.classList.add('table');
+                tableWrapper.appendChild(table);
+
+                // Crear las sillas
+                for (let j = 0; j < 4; j++) {
+                    const chair = document.createElement('div');
+                    chair.classList.add('chair');
+                    tableWrapper.appendChild(chair);
+                }
+
+                column.appendChild(tableWrapper);
+            }
+
+            // Agregar la columna completa al contenedor principal
+            container.appendChild(column);
+        }
+    }
+
+    // Generar mesas en la sección VIP
+    const vipContainer = document.querySelector('.centro');
+    generateTables(vipContainer, 42, 7);
+
+    // Generar mesas en la sección General Izquierda
+    const leftContainer = document.querySelector('.izq');
+    generateTables(leftContainer, 5, 5);
+    generateTables(leftContainer, 4, 4);
+    generateTables(leftContainer, 4, 4);
+
+
+    // Generar mesas en la sección General Derecha
+    const rightContainer = document.querySelector('.der');
+    generateTables(rightContainer, 5, 5);
+    generateTables(rightContainer, 4, 4);
+    generateTables(rightContainer, 5, 5);
+    </script>
+</body>
+</html>

@@ -10,7 +10,7 @@ public class RestauranteMain {
         Javalin app = Javalin.create(config -> {
             config.staticFiles.add("src/main/resources/public", Location.EXTERNAL);
             config.fileRenderer(new JavalinThymeleaf());
-        }).start(3000);
+        }).start(3001);
         app.get("/listado-de-eventos", Server::listadoDeEventos);
         app.get("/evento", Server::evento);
         app.get("/evento/nombre/{nombre}", Server::eventoPorNombre);

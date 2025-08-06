@@ -1,10 +1,3 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
-    text-align: center;
-    margin-top: 100px;
-}
-
 div {
     display: flex;
     flex-direction: column;
@@ -15,6 +8,103 @@ div {
     text-decoration: none;
 }
 
-div:hover {
+/* div:hover {
     text-decoration: underline;
+} */
+
+/* Fondo oscuro y fuente elegante */
+body {
+  /* background-color: #130a03; */
+  /* font-family: 'Georgia', serif; */
+  /* color: #f7ead7; */
+  padding: 40px;
+}
+
+/* Título */
+h1 {
+  font-size: 48px;
+  /* color: #f7ead7; */
+  margin-bottom: 30px;
+}
+
+/* Contenedor de eventos */
+#lista-eventos {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Cada evento */
+#lista-eventos span {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #333;
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
+/* Enlace al evento */
+#lista-eventos a.enlace-evento {
+  /* color: #f4b860; */
+  font-size: 20px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+#lista-eventos a.enlace-evento {
+  /* color: #ffc777; */
+}
+
+/* Botón "Lista" */
+.boton-lista, .boton-editar, .boton-reserva, .boton-borrar{
+  background-color: transparent;
+  /* color: #f7ead7; */
+  /* border: 1px solid #f7ead7; */
+  border: 1px solid black;
+  padding: 6px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.boton-lista:hover,.boton-editar:hover {
+  /* background-color: #f7ead7; */
+  /* color: #130a03; */
+  font-weight: bold;
+}
+/* css extra */
+/* Contenedor que agrupa los botones */
+.botones-container {
+  display: flex;
+  flex: wrap;
+  flex-direction: row;
+  gap: 10px; /* espacio entre botones */
+}
+
+.boton-borrar {
+  background-color: #ff4d4d; /* rojo claro opcional para diferenciar */
+  color: white;
+  text-align: center;
+  margin-top: -1.2em;
+  margin-left: 10em;
+  margin-right: 1.3em;
+}
+
+#agregarEvento {
+  width: 10em;
+  height: 3em;
+  background-color: white;
+  color: #007bff;
+  border: 1px solid black;
+}
+
+#agregarEvento:hover{
+  cursor: pointer;
+}
+
+.botones{
+  display: flex;
 }

@@ -1,0 +1,65 @@
+.centrar{
+    display: grid;
+    grid-template-areas: 
+    "formulario pago";
+    gap: 20px;
+    
+}
+
+#formulario{
+    grid-area: formulario;
+    justify-self: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    width: 25vw;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 2em;
+    align-items: center;
+}
+
+.pago{
+    grid-area: pago;
+    justify-self: start;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 2em;
+}
+
+button{
+    margin-top: 20px;
+}
+
+#volver{
+    display: block; /* El botón sigue siendo un bloque */
+    background-color: #8e735b; /* Marrón suave/beige cálido (combinable con café) */
+    color: white; /* Amarillo mostaza cálido (complementa el amarillo) */
+    font-size: 16px;
+    padding: 6px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    margin-right: 18%;
+}
+
+#reservar{
+    display: block; /* El botón sigue siendo un bloque */
+    background-color: #8e735b; /* Marrón suave/beige cálido (combinable con café) */
+    color: white; /* Amarillo mostaza cálido (complementa el amarillo) */
+    font-size: 16px;
+    padding: 6px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    /* margin-right: 18%; */
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reservas del Evento</title>
+  <link rel="stylesheet" href="/css/lista.css"> <!-- Asumiendo que servirás este CSS -->
+</head>
+<body>
+  <h1>Reservas - Evento <%= nombreEvento %></h1>
+
+  <% if (reservas.length === 0) { %>
+    <p>No hay reservas para este evento.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Teléfono</th>
+          <th>Boletos</th>
+          <th>Código</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reservas.forEach(r => { %>
+          <tr>
+            <td><%= r.nombre %></td>
+            <td><%= r.telefono %></td>
+            <td><%= r.boletos %></td>
+            <td><%= r.codigo %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+
+  <a href="/">Volver</a>
+</body>
+</html>
+
+

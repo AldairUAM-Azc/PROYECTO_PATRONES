@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/datos.css">
+</head>
+<body>
+    <div class = "centrar">
+        <form id="formulario" action="#">
+            <h3>Ingrese sus datos</h3>
+            <span>Nombre(s)</span><input type="text" id="nombre" name="nombre" autocomplete="off">
+            <span>Apellidos</span><input type="text" id="apellidos" name="apellidos" autocomplete="off">
+            <span>Telefono de contacto: </span><input type="text" id="telefono" name="telefono" autocomplete="off">
+            <button type="button" id="reservar">Reservar</button>
+        </form>
+        <div class = "pago">
+            <h2>Mesas y Sillas:</h2>
+            <!-- <h3>Tipo <%= tipo %></h3> -->
+            <ul>
+                <% listaMesaSilla.forEach(function(item, index) { %>
+                    <li>Mesa: <%= item.mesa %>, Silla: <%= item.silla %></li>
+                <% }); %>
+            </ul>
+        </div>
+    </div>
+
+    <button id = "volver"> volver </button>
+
+    <script>
+        window.sembrado = <%- JSON.stringify(sembrado) %>;
+        window.listaMesaSilla = <%- JSON.stringify(listaMesaSilla) %>;
+        window.tipo = <%- JSON.stringify(tipo) %>;
+    </script>
+    <script src="js/datos.js"></script>
+</body>
+</html>

@@ -1,3 +1,11 @@
+// document.addEventListener('DOMContentLoaded', () => {
+//     document.querySelector('.inicio').addEventListener('click', (e) => {
+//         e.preventDefault();
+//         console.log('hola');
+//         window.location.href = "/";
+//     });
+// });
+
 let tipoEvento;
 
 const trova = document.getElementById("Trova");
@@ -40,12 +48,22 @@ document.getElementById('nuevo-evento').addEventListener('submit', (event) =>{
     const fecha = document.getElementById('fecha').value;
     const tipo = tipoEvento;
     let precios;
-    if(tipo === "Trova"){
+    if(tipo == "Trova"){
+        const evento = document.querySelector('.evento.trova');    
         precios = {
-            VIP: document.querySelector('input[name="VIP"]').value,
-            Preferente: document.querySelector('input[name="Preferente"]').value,
-            General: document.querySelector('input[name="General"]').value,
-            Laterales: document.querySelector('input[name="Laterales"]').value
+            VIP: evento.querySelector('input[name="VIP"]').value,
+            Preferente: evento.querySelector('input[name="Preferente"]').value,
+            General: evento.querySelector('input[name="General"]').value,
+            Laterales: evento.querySelector('input[name="Laterales"]').value
+        };
+        //console.log(`VIP: ${VIP} Preferente: ${Preferente} General: ${General} Laterales: ${Laterales}`);
+    }
+    if(tipo == "General"){
+        const evento = document.querySelector('.evento.general');
+        precios = {
+            VIP: evento.querySelector('input[name="VIP"]').value,
+            Preferente: evento.querySelector('input[name="Preferente"]').value,
+            General: evento.querySelector('input[name="General"]').value
         };
         //console.log(`VIP: ${VIP} Preferente: ${Preferente} General: ${General} Laterales: ${Laterales}`);
     }
@@ -65,7 +83,12 @@ document.getElementById('nuevo-evento').addEventListener('submit', (event) =>{
         console.error('Error:',err);
         alert('Ocurrio un error al agregar el evento.');
     });
+    window.location.href = "/";
 });
+
+document.getElementById("inicio").addEventListener('click',()=>{
+    window.location.href = "/";
+})
 
 //limite de fecha
 const inputFecha = document.getElementById('fecha');

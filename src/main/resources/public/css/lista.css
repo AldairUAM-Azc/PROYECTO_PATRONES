@@ -1,0 +1,36 @@
+h1 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+th, td {
+  text-align: left;
+  padding: 12px 8px;
+}
+
+tbody tr + tr {
+  border-top: 1px solid #ddd; /* solo separaciones entre filas */
+}
+
+th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
+}
+
+a {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: none;
+  color: #007BFF;
+}
+
+a:hover {
+  text-decoration: underline;
+}

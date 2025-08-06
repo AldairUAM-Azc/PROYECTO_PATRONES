@@ -12,52 +12,52 @@
         <!-- Campo Nombre del Evento -->
         <div class="nombre">
             <label>Nombre del Evento:</label>
-            <input type="text" id="nombre"placeholder="Escribe el nombre del evento" required>
+            <input type="text" id="nombre"placeholder="Escribe el nombre del evento" required autocomplete="off">
         </div>
         
         <!-- Campo Fecha -->
         <div class="fecha">
             <label>Fecha:</label>
-            <input type="date" id="fecha" required>
+            <input type="date" id="fecha" required autocomplete="off">
         </div>
         
         <div class = "tipo">
             <button type="button" id="Trova">Trova</button>
-            <button type="button" id="General">General</button>
-            <button type="button" id="Baile">Baile</button>
+            <button type="button" id="General">Baile</button>
+            <button type="button" id="Baile">General</button>
         </div>
 
         <div class = "evento trova">
             <div class="zona"> Zona Vip </div>
-            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="VIP" placeholder="500" ></div>
-            <div class="zona"> Zona Vip Gris </div>
-            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="Preferente" placeholder="500"></div>
+            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="VIP" placeholder="000" ></div>
             <div class="zona"> Zona Preferente </div>
-            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="General" placeholder="500"></div>
+            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="Preferente" placeholder="000"></div>
             <div class="zona"> Zona General </div>
-            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="Laterales" placeholder="500"></div>
+            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="General" placeholder="000"></div>
+            <div class="zona"> Zona Laterales </div>
+            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="Laterales" placeholder="000"></div>
         </div>
 
         <div class = "evento general">
             <div class="zona"> Zona Vip </div>
-            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="VIP" placeholder="500"></div>
+            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="VIP" placeholder="000"></div>
             <div class="zona"> Zona Preferente </div>
-            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="Preferente" placeholder="500"></div>
+            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="Preferente" placeholder="000"></div>
             <div class="zona"> Zona General </div>
-            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="Laterales" placeholder="500"></div>
+            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="General" placeholder="000"></div>
         </div>
 
         <div class = "evento baile">
             <div class="zona"> Pista </div>
-            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="Pista" placeholder="100"></div>
+            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="Pista" placeholder="000"></div>
             <div class="zona"> Laterales </div>
-            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="Laterales" placeholder="100"></div>
+            <div class="precio"> <span style="font-weight: bold;">$</span> <input type="number" name="Laterales" placeholder="000"></div>
         </div>
 
         <!-- Botón de Envío -->
         <button type="submit" id="Agregar">Agregar</button>
     </form>
-
+    <button type="button" id="inicio">Ir a lista de eventos</button>
     <script src="js/eventos.js"></script>
 </body>
 </html>

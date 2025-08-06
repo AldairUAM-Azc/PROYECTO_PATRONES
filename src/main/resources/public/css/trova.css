@@ -20,7 +20,7 @@ h1 {
     grid-template-areas:
         "general-izq vip general-der"
         "footer footer footer"
-        "botones botones compra";
+        "inicio botones compra";
     gap: 20px;
     max-width: 100%;
 }
@@ -290,3 +290,91 @@ h1 {
 .ocupada{
     background-color: rgb(84, 255, 16);
 }
+
+/* css para la lista de precios */
+
+table {
+  width: 50%;
+  border-collapse: collapse;
+  background-color: #fff;
+  font-size: 18px; /* texto más grande */
+}
+
+th, td {
+  padding: 12px 10px;
+  text-align: left;
+}
+
+thead {
+  background-color: #f0f0f0;
+}
+
+tbody tr + tr {
+  border-top: 1px solid #ddd; /* solo borde entre filas */
+}
+
+#inicio{
+    grid-area: inicio;
+    display: block; /* El botón sigue siendo un bloque */
+    justify-self: end; /* Alineamos el botón a la derecha */
+    background-color: #8e735b; /* Marrón suave/beige cálido (combinable con café) */
+    color: white; /* Amarillo mostaza cálido (complementa el amarillo) */
+    font-size: 16px;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    margin-right: 18%;
+}
+
+#inicio:active {
+    background-color: #6b4f39;  /* Un tono más oscuro de marrón */
+    color: white; /* Un amarillo aún más cálido y profundo */
+    transform: scale(0.98); /* Efecto de reducir el tamaño al hacer clic */
+}
+
+#inicio:hover {
+    background-color: #7a5d45;  /* Marrón más oscuro (refleja el café) */
+    color: white; /* Amarillo más brillante (llamativo pero armonioso) */
+    transform: scale(1.05); /* Efecto de agrandar el botón */
+}
+
+/* codigo de colores */
+#bolitaVIP{
+    display:inline-block; 
+    width:20px; 
+    height:20px; 
+    border-radius:50%; 
+    background-color:#f8ca67; 
+    margin-right:8px;
+}
+
+#bolitaPreferente{
+    display:inline-block; 
+    width:20px; 
+    height:20px; 
+    border-radius:50%; 
+    background-color:rgb(228, 228, 228); 
+    margin-right:8px;
+}
+
+#bolitaGeneral{
+    display:inline-block; 
+    width:20px; 
+    height:20px; 
+    border-radius:50%; 
+    background-color:#007bff; 
+    margin-right:8px;
+}
+
+#bolitaLaterales{
+    display:inline-block; 
+    width:20px; 
+    height:20px; 
+    border-radius:50%; 
+    background-color:#b35b1c; 
+    margin-right:8px;
+}
+

@@ -9,7 +9,7 @@ import java.util.List;
 public class DatosDTO {
 
   private int sembrado;
-  private List<MesaSilla> listaMesaSilla;
+  private List<MesaSillaDTO> listaMesaSilla;
   private String tipo;
 
   public int getSembrado() {
@@ -20,11 +20,11 @@ public class DatosDTO {
     this.sembrado = sembrado;
   }
 
-  public List<MesaSilla> getListaMesaSilla() {
+  public List<MesaSillaDTO> getListaMesaSilla() {
     return listaMesaSilla;
   }
 
-  public void setListaMesaSilla(List<MesaSilla> listaMesaSilla) {
+  public void setListaMesaSilla(List<MesaSillaDTO> listaMesaSilla) {
     this.listaMesaSilla = listaMesaSilla;
   }
 
@@ -39,34 +39,6 @@ public class DatosDTO {
   @Override
   public String toString() {
     return "DatosDTO{" + "sembrado=" + sembrado + ", listaMesaSilla=" + listaMesaSilla + ", tipo=" + tipo + '}';
-  }
-
-}
-
-class MesaSilla {
-
-  private String mesa;
-  private String silla;
-
-  public String getMesa() {
-    return mesa;
-  }
-
-  public void setMesa(String mesa) {
-    this.mesa = mesa;
-  }
-
-  public String getSilla() {
-    return silla;
-  }
-
-  public void setSilla(String silla) {
-    this.silla = silla;
-  }
-
-  @Override
-  public String toString() {
-    return "MesaSilla{" + "mesa=" + mesa + ", silla=" + silla + '}';
   }
 
 }

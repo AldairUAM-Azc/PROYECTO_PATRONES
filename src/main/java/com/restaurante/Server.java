@@ -130,13 +130,7 @@ public class Server {
 
       try {
         EventData eventData = objectMapper.readValue(eventDataJsonString, EventData.class);
-//        System.out.println(eventData.getIdEvento());
-//        System.out.println(eventData.getNombre());
-//        System.out.println(eventData.getTipo());
-
-//        String viewName = "templates/" + eventData.getTipo() + ".html";
         String viewName = "views/" + eventData.getTipo() + ".html";
-//        System.out.println(viewName);
         Map<String, Object> model = new HashMap<>();
         model.put("evento", eventData);
         ctx.render(viewName, model);
@@ -149,20 +143,22 @@ public class Server {
   }
 
   public static void reservarSillas(Context ctx) {
-    System.out.println("reservarSillas");
+
     int idEvento = Integer.parseInt(ctx.pathParam("idEvento"));
-    ReservacionJSON reservacion = ctx.bodyAsClass(ReservacionJSON.class
-    );
-    try {
-      boolean isReservacion = eventosDAO.reservarSillas(idEvento, reservacion.getMesa(), reservacion.getSilla());
-      if (isReservacion) {
-        ctx.status(200).json(Map.of("message", "Reserva realizada correctamente"));
-      } else {
-        ctx.status(400).json(Map.of("message", "No se pudo realizar la reservación"));
-      }
-    } catch (SQLException ex) {
-      ctx.status(500).json(Map.of("error", "Error al actualizar los datos"));
+    ReservacionDTO reservacion = ctx.bodyAsClass(ReservacionDTO.class);
+    int codigo = reservacion.getCodigo();
+    int mesa = reservacion.getSilla().getMesa();
+    String silla = reservacion.getSilla().getSilla();
+    if (silla.isBlank()) {
+      ctx.status(400).json(Map.of("error", "Los parámetros mesa y silla deben ser números válidos"));
     }
+
+    boolean isReservacion = eventosDAO.reservarSillas(codigo, mesa, idEvento, silla);
+    if (!isReservacion) {
+      ctx.status(400).json(Map.of("message", "No se encontró el registro con los datos proporcionados"));
+    }
+    ctx.status(200).json(Map.of("message", "Reserva realizada correctamente"));
+
   }
 
   public static void getPrecios(Context ctx) {
@@ -176,7 +172,6 @@ public class Server {
       String jsonDataString = ctx.formParam("jsonData");
       ObjectMapper objectMapper = new ObjectMapper();
       DatosDTO datos = objectMapper.readValue(jsonDataString, DatosDTO.class);
-      System.out.println(datos);
       Map<String, Object> modelo = new HashMap<>();
       modelo.put("sembrado", datos.getSembrado());
       modelo.put("tipo", datos.getTipo());
@@ -201,7 +196,6 @@ public class Server {
     }
 
     boolean isCodigoInserted = eventosDAO.insertarReserva(dto.getCodigo(), dto.getNombreCompleto(), dto.getTelefono());
-    System.out.println("Is inserted codigo " + isCodigoInserted);
     if (!isCodigoInserted) {
       ctx.status(404).json(Map.of("message", "No se encontró el registro con los datos proporcionados"));
     }

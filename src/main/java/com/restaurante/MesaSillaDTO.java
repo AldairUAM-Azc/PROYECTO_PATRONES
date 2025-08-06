@@ -1,20 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.restaurante;
 
 /**
  *
- * @author aldair
+ * @author Avalos Albino Aldair Oswaldo 2222005685
  */
-public class ReservacionJSON {
+public class MesaSillaDTO {
 
   private int mesa;
   private String silla;
-
-  public ReservacionJSON() {
-  }
 
   public int getMesa() {
     return mesa;
@@ -34,7 +27,7 @@ public class ReservacionJSON {
 
   @Override
   public String toString() {
-    return "ReservacionJSON{" + "mesa=" + mesa + ", silla=" + silla + '}';
+    return "MesaSilla{" + "mesa=" + mesa + ", silla=" + silla + '}';
   }
 
 }

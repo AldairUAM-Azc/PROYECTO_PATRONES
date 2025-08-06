@@ -183,23 +183,31 @@ public class EventosDAO {
     return estadoSillasLista;
   }
 
-  public boolean reservarSillas(int idEvento, int mesaNumero, String sillaLetra) throws SQLException {
+  public boolean reservarSillas(int codigo, int mesaNumero, int idEvento, String sillaLetra) {
     String query = """
-                        UPDATE silla s
-                            JOIN mesa m ON m.idMesa = s.idMesa
-                            JOIN precioEvento p ON p.idPrecio = m.idPrecio
-                            JOIN evento e ON e.idEvento = p.idEvento
-                        SET s.estado = true
-                            WHERE m.numero = ? 
-                                AND e.idEvento = ?
-                                AND s.letra = ?;
-                       """;
-    PreparedStatement ps = dbConn.prepareStatement(query);
-    ps.setInt(1, mesaNumero);
-    ps.setInt(2, idEvento);
-    ps.setString(3, sillaLetra);
-    int rowcount = ps.executeUpdate();
-    return rowcount > 0;
+                      UPDATE silla s
+                          JOIN mesa m ON m.idMesa = s.idMesa
+                          JOIN precioEvento p ON p.idPrecio = m.idPrecio
+                          JOIN evento e ON e.idEvento = p.idEvento
+                      SET s.estado = true,
+                          s.codigo = ?
+                      WHERE m.numero = ? 
+                            AND e.idEvento = ?
+                            AND s.letra = ?;
+                   """;
+    PreparedStatement ps;
+    int rows = 0;
+    try {
+      ps = dbConn.prepareStatement(query);
+      ps.setInt(1, codigo);
+      ps.setInt(2, mesaNumero);
+      ps.setInt(3, idEvento);
+      ps.setString(4, sillaLetra);
+      rows = ps.executeUpdate();
+    } catch (SQLException ex) {
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return rows > 0;
   }
 
   public List<TipoPrecioDTO> getPrecios(int idEvento) {

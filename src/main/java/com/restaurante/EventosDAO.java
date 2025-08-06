@@ -258,4 +258,18 @@ public class EventosDAO {
     }
     return cuenta;
   }
+
+  boolean insertarReserva(int codigo, String nombreCompleto, String telefono) {
+    String query = "INSERT INTO Reserva VALUES( ? , ? , ?)";
+    int rows = 0;
+    try (PreparedStatement ps = dbConn.prepareStatement(query);) {
+      ps.setInt(1, codigo);
+      ps.setString(2, nombreCompleto);
+      ps.setString(3, telefono);
+      rows = ps.executeUpdate();
+    } catch (SQLException ex) {
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return rows > 0;
+  }
 }

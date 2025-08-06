@@ -192,4 +192,19 @@ public class Server {
     int conteo = eventosDAO.obtenerConteo(idEvento);
     ctx.json(Map.of("conteo", conteo));
   }
+
+  public static void postCodigo(Context ctx) {
+    ClienteDTO dto = ctx.bodyAsClass(ClienteDTO.class);
+
+    if (Double.isNaN(dto.getCodigo()) || dto.getNombreCompleto().isBlank() || dto.getTelefono().isBlank()) {
+      ctx.status(400).json(Map.of("error", "Parametros invalidos"));
+    }
+
+    boolean isCodigoInserted = eventosDAO.insertarReserva(dto.getCodigo(), dto.getNombreCompleto(), dto.getTelefono());
+    System.out.println("Is inserted codigo " + isCodigoInserted);
+    if (!isCodigoInserted) {
+      ctx.status(404).json(Map.of("message", "No se encontró el registro con los datos proporcionados"));
+    }
+    ctx.status(200).json(Map.of("message", "Reserva realizada correctamente"));
+  }
 }

@@ -21,6 +21,7 @@ public class RestauranteMain {
     app.get("/precios/{idEvento}", Server::getPrecios);
     app.post("/datos", Server::getDatos);
     app.get("/conteo/{idEvento}", Server::getConteo);
+    app.post("/codigo", Server::postCodigo);
   }
 
 }

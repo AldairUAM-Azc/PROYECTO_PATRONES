@@ -170,4 +170,20 @@ public class Server {
     List<TipoPrecioDTO> lista = eventosDAO.getPrecios(idEvento);
     ctx.json(lista);
   }
+
+  public static void getDatos(Context ctx) {
+    try {
+      String jsonDataString = ctx.formParam("jsonData");
+      ObjectMapper objectMapper = new ObjectMapper();
+      DatosDTO datos = objectMapper.readValue(jsonDataString, DatosDTO.class);
+      System.out.println(datos);
+      Map<String, Object> modelo = new HashMap<>();
+      modelo.put("sembrado", datos.getSembrado());
+      modelo.put("tipo", datos.getTipo());
+      modelo.put("listaMesaSilla", datos.getListaMesaSilla());
+      ctx.render("views/datos.html", modelo);
+    } catch (JsonProcessingException ex) {
+      Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
 }

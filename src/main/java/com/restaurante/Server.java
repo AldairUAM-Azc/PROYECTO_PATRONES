@@ -1,5 +1,16 @@
 package com.restaurante;
 
+import com.restaurante.fabrica.EventoFactory;
+import com.restaurante.fabrica.EventoFactoryProducer;
+import com.restaurante.dao.EventosDAO;
+import com.restaurante.dto.TipoPrecioDTO;
+import com.restaurante.dto.PrecioDTO;
+import com.restaurante.dto.ReservacionConBoletosDTO;
+import com.restaurante.dto.EventoDTO;
+import com.restaurante.dto.DatosDTO;
+import com.restaurante.dto.ReservacionDTO;
+import com.restaurante.dto.ClienteDTO;
+import com.restaurante.dto.EditarEventoDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
@@ -77,20 +88,18 @@ public class Server {
     LocalDate fecha = dto.getFecha();
     PrecioDTO precio = dto.getPrecio();
 
-    if (tipo.equals("Trova")) {
-      boolean eventoCreado = eventosDAO.crearEventoTrova(nombre, tipo, fecha, precio);
-      if (!eventoCreado) {
-        ctx.status(500).result("Error en el servidor");
-      }
-      ctx.result("Evento de " + nombre + " agregado");
-    }
-
-    if (tipo.equals("General")) {
-      boolean eventoCreado = eventosDAO.crearEventoGeneral(nombre, tipo, fecha, precio);
-      if (!eventoCreado) {
-        ctx.status(500).result("Error en el servidor");
-      }
-      ctx.result("Evento de " + nombre + " agregado");
+    try {
+        EventoFactoryProducer producer = new EventoFactoryProducer(eventosDAO);
+        EventoFactory factory = producer.getFactory(tipo);
+        boolean eventoCreado = factory.crearEvento(nombre, tipo, fecha, precio);
+        
+        if (!eventoCreado) {
+            ctx.status(500).result("Error en el servidor");
+            return;
+        }
+        ctx.result("Evento de " + nombre + " agregado");
+    } catch (IllegalArgumentException e) {
+        ctx.status(400).result("Tipo de evento no soportado: " + tipo);
     }
   }
 

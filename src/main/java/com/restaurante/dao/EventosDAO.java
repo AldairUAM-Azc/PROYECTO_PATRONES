@@ -1,5 +1,12 @@
-package com.restaurante;
+package com.restaurante.dao;
 
+import com.restaurante.EstadoSillas;
+import com.restaurante.Evento;
+import com.restaurante.Server;
+import com.restaurante.dto.TipoPrecioDTO;
+import com.restaurante.dto.PrecioDTO;
+import com.restaurante.dto.ClienteDTO;
+import com.restaurante.dto.EditarEventoDTO;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,16 +35,16 @@ public class EventosDAO {
   public List<Evento> getAllEventos() throws SQLException {
     List<Evento> eventos = new ArrayList<>();
     String query = """
-                    SELECT 
-                      e.idEvento AS idEvento,
-                      e.nombre AS nombre,
-                      t.tipo AS tipo,
-                      e.fecha AS fecha
-                    FROM 
-                      evento AS e 
-                      JOIN tipoEvento AS t ON e.idTipoEVento = t.idTipoEvento
-                    ORDER BY e.fecha ASC;
-                  """;
+          SELECT
+            e.idEvento AS idEvento,
+            e.nombre AS nombre,
+            t.tipo AS tipo,
+            e.fecha AS fecha
+          FROM
+            evento AS e
+            JOIN tipoEvento AS t ON e.idTipoEVento = t.idTipoEvento
+          ORDER BY e.fecha ASC;
+        """;
 
     try {
       PreparedStatement ps = dbConn.prepareStatement(query);
@@ -91,13 +98,13 @@ public class EventosDAO {
   }
 
   boolean crearEvento(
-          String nombre,
-          String tipo,
-          Date fecha,
-          Double precioVIP,
-          Double precioPreferente,
-          Double precioGeneral,
-          Double precioLaterales) throws SQLException {
+      String nombre,
+      String tipo,
+      Date fecha,
+      Double precioVIP,
+      Double precioPreferente,
+      Double precioGeneral,
+      Double precioLaterales) throws SQLException {
     String query = "CALL evento" + tipo + "( ? , ? , ? , ? , ? , ? , ? );";
     CallableStatement ps = dbConn.prepareCall(query);
     ps.setString(1, nombre);
@@ -110,11 +117,11 @@ public class EventosDAO {
     return ps.execute();
   }
 
-  List<Evento> getEventos() throws SQLException {
+  public List<Evento> getEventos() throws SQLException {
     List<Evento> eventos = new ArrayList<>();
     String query = "SELECT "
-            + "* "
-            + "FROM evento";
+        + "* "
+        + "FROM evento";
 
     try {
       PreparedStatement ps = dbConn.prepareStatement(query);
@@ -139,20 +146,20 @@ public class EventosDAO {
     return eventos;
   }
 
-  List<EstadoSillas> getEstadoSillas(int targetIdEvento) throws SQLException {
+  public List<EstadoSillas> getEstadoSillas(int targetIdEvento) throws SQLException {
     List<EstadoSillas> estadoSillasLista = new ArrayList<>();
-    String query = """ 
-                   SELECT 
-                       e.nombre, 
-                       m.numero AS Mesa, 
-                       s.letra AS Silla, 
-                       s.estado , 
-                       p.precio 
-                   FROM evento e     
-                     JOIN precioEvento p ON e.idEvento = p.idEvento    
-                     JOIN mesa m ON p.idPrecio = m.idPrecio    
-                     JOIN silla s ON m.idMesa = s.idMesa    
-                   WHERE e.idEvento =  ?;""";
+    String query = """
+        SELECT
+            e.nombre,
+            m.numero AS Mesa,
+            s.letra AS Silla,
+            s.estado ,
+            p.precio
+        FROM evento e
+          JOIN precioEvento p ON e.idEvento = p.idEvento
+          JOIN mesa m ON p.idPrecio = m.idPrecio
+          JOIN silla s ON m.idMesa = s.idMesa
+        WHERE e.idEvento =  ?;""";
     try {
       PreparedStatement ps = dbConn.prepareStatement(query);
       ps.setInt(1, targetIdEvento);
@@ -180,16 +187,16 @@ public class EventosDAO {
 
   public boolean reservarSillas(int codigo, int mesaNumero, int idEvento, String sillaLetra) {
     String query = """
-                      UPDATE silla s
-                          JOIN mesa m ON m.idMesa = s.idMesa
-                          JOIN precioEvento p ON p.idPrecio = m.idPrecio
-                          JOIN evento e ON e.idEvento = p.idEvento
-                      SET s.estado = true,
-                          s.codigo = ?
-                      WHERE m.numero = ? 
-                            AND e.idEvento = ?
-                            AND s.letra = ?;
-                   """;
+           UPDATE silla s
+               JOIN mesa m ON m.idMesa = s.idMesa
+               JOIN precioEvento p ON p.idPrecio = m.idPrecio
+               JOIN evento e ON e.idEvento = p.idEvento
+           SET s.estado = true,
+               s.codigo = ?
+           WHERE m.numero = ?
+                 AND e.idEvento = ?
+                 AND s.letra = ?;
+        """;
     PreparedStatement ps;
     int rows = 0;
     try {
@@ -208,14 +215,14 @@ public class EventosDAO {
   public List<TipoPrecioDTO> getPrecios(int idEvento) {
     List<TipoPrecioDTO> lista = new ArrayList<>();
     String query = """
-                  SELECT 
-                    t.tipo, 
-                    p.precio
-                  FROM precioEvento p
-                       JOIN tipoMesa t ON t.idTipoMesa = p.idTipoMesa
-                       JOIN evento e ON p.idEvento = e.idEvento
-                  WHERE e.idEvento = ?; 
-                  """;
+        SELECT
+          t.tipo,
+          p.precio
+        FROM precioEvento p
+             JOIN tipoMesa t ON t.idTipoMesa = p.idTipoMesa
+             JOIN evento e ON p.idEvento = e.idEvento
+        WHERE e.idEvento = ?;
+        """;
     PreparedStatement ps;
     try {
       ps = dbConn.prepareStatement(query);
@@ -236,17 +243,17 @@ public class EventosDAO {
     return lista;
   }
 
-  int obtenerConteo(int idEvento) {
+  public int obtenerConteo(int idEvento) {
     String query = """
-                  SELECT 
-                    COUNT(*) AS numero
-                  FROM silla s
-                    JOIN mesa m ON m.idMesa = s.idMesa
-                    JOIN precioEvento p ON p.idPrecio = m.idPrecio
-                    JOIN evento e ON e.idEvento = p.idEvento
-                  WHERE 
-                    estado = true AND e.idEvento = ?
-                   """;
+        SELECT
+          COUNT(*) AS numero
+        FROM silla s
+          JOIN mesa m ON m.idMesa = s.idMesa
+          JOIN precioEvento p ON p.idPrecio = m.idPrecio
+          JOIN evento e ON e.idEvento = p.idEvento
+        WHERE
+          estado = true AND e.idEvento = ?
+         """;
     PreparedStatement ps;
     int cuenta = 0;
     try {
@@ -262,7 +269,7 @@ public class EventosDAO {
     return cuenta;
   }
 
-  boolean insertarReserva(int codigo, String nombreCompleto, String telefono) {
+  public boolean insertarReserva(int codigo, String nombreCompleto, String telefono) {
     String query = "INSERT INTO Reserva VALUES( ? , ? , ?)";
     int rows = 0;
     try (PreparedStatement ps = dbConn.prepareStatement(query);) {
@@ -276,7 +283,7 @@ public class EventosDAO {
     return rows > 0;
   }
 
-  boolean crearEventoTrova(String nombre, String tipo, LocalDate fecha, PrecioDTO precio) {
+  public boolean crearEventoTrova(String nombre, String tipo, LocalDate fecha, PrecioDTO precio) {
     String query = "CALL eventoTrova ( ? , ? , ? , ? , ? , ? , ? );";
     boolean hadResult = false;
     try {
@@ -295,7 +302,7 @@ public class EventosDAO {
     return hadResult;
   }
 
-  boolean crearEventoGeneral(String nombre, String tipo, LocalDate fecha, PrecioDTO precio) {
+  public boolean crearEventoGeneral(String nombre, String tipo, LocalDate fecha, PrecioDTO precio) {
     String query = "CALL eventoGeneral ( ? , ? , ? , ? , ? , ? );";
     boolean hadResult = false;
     try {
@@ -329,19 +336,19 @@ public class EventosDAO {
 
   public List<EditarEventoDTO> mostrarFormularioEditar(int idEvento) {
     List<EditarEventoDTO> lista = new ArrayList<>();
-    String query = """              
-                  SELECT 
-                    m.tipo, 
-                    p.precio, 
-                    e.fecha, 
-                    e.nombre, 
-                    t.tipo AS tipoEvento
-                  FROM evento e 
-                    JOIN tipoEvento t ON e.idTipoEvento = t.idTipoEvento
-                    JOIN precioEvento p ON e.idEvento = p.idEvento
-                    JOIN tipoMesa m ON m.idTipoMesa = p.idTipoMesa 
-                  WHERE e.idEvento = ?;
-                """;
+    String query = """
+          SELECT
+            m.tipo,
+            p.precio,
+            e.fecha,
+            e.nombre,
+            t.tipo AS tipoEvento
+          FROM evento e
+            JOIN tipoEvento t ON e.idTipoEvento = t.idTipoEvento
+            JOIN precioEvento p ON e.idEvento = p.idEvento
+            JOIN tipoMesa m ON m.idTipoMesa = p.idTipoMesa
+          WHERE e.idEvento = ?;
+        """;
     PreparedStatement ps;
 
     try {
@@ -349,7 +356,6 @@ public class EventosDAO {
       ps.setInt(1, idEvento);
       ResultSet rs = ps.executeQuery();
       while (rs.next()) {
-        String tipoMesa = rs.getString("tipo");
         double precio = rs.getDouble("precio");
         Date fecha = rs.getDate("fecha");
         String nombre = rs.getString("nombre");
@@ -362,12 +368,12 @@ public class EventosDAO {
     return lista;
   }
 
-  boolean actualizarEvento(String nombre, LocalDate fecha, int idEvento) {
+  public boolean actualizarEvento(String nombre, LocalDate fecha, int idEvento) {
     String query = """
-                    UPDATE evento 
-                    SET nombre = ?, fecha = ? 
-                    WHERE idEvento = ?
-                   """;
+         UPDATE evento
+         SET nombre = ?, fecha = ?
+         WHERE idEvento = ?
+        """;
     int rows = 0;
     try {
       PreparedStatement ps = dbConn.prepareStatement(query);
@@ -381,18 +387,18 @@ public class EventosDAO {
     return rows > 0;
   }
 
-  boolean actualizarPreciosTrova(double vip, double preferente, double general, double laterales, int idEvento) {
+  public boolean actualizarPreciosTrova(double vip, double preferente, double general, double laterales, int idEvento) {
     String query = """
-                  UPDATE precioEvento
-                  SET precio = 
-                      CASE
-                        WHEN idTipoMesa = 1 THEN ?
-                        WHEN idTipoMesa = 2 THEN ?
-                        WHEN idTipoMesa = 3 THEN ?
-                        WHEN idTipoMesa = 4 THEN ?
-                      END
-                  WHERE idEvento = ?
-                  """;
+        UPDATE precioEvento
+        SET precio =
+            CASE
+              WHEN idTipoMesa = 1 THEN ?
+              WHEN idTipoMesa = 2 THEN ?
+              WHEN idTipoMesa = 3 THEN ?
+              WHEN idTipoMesa = 4 THEN ?
+            END
+        WHERE idEvento = ?
+        """;
     PreparedStatement ps;
     int rows = 0;
     try {
@@ -409,17 +415,17 @@ public class EventosDAO {
     return rows > 0;
   }
 
-  boolean actualizarPreciosGeneral(double vip, double preferente, double general, int idEvento) {
+  public boolean actualizarPreciosGeneral(double vip, double preferente, double general, int idEvento) {
     String query = """
-                  UPDATE precioEvento
-                  SET precio = 
-                      CASE
-                        WHEN idTipoMesa = 1 THEN ?
-                        WHEN idTipoMesa = 2 THEN ?
-                        WHEN idTipoMesa = 3 THEN ?
-                      END
-                  WHERE idEvento = ?
-                  """;
+        UPDATE precioEvento
+        SET precio =
+            CASE
+              WHEN idTipoMesa = 1 THEN ?
+              WHEN idTipoMesa = 2 THEN ?
+              WHEN idTipoMesa = 3 THEN ?
+            END
+        WHERE idEvento = ?
+        """;
     PreparedStatement ps;
     int rows = 0;
     try {
@@ -427,6 +433,7 @@ public class EventosDAO {
       ps.setDouble(1, vip);
       ps.setDouble(2, preferente);
       ps.setDouble(3, general);
+      ps.setInt(4, idEvento);
       rows = ps.executeUpdate();
     } catch (SQLException ex) {
       Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -437,17 +444,17 @@ public class EventosDAO {
   public List<ClienteDTO> listarReservas(int idEvento) {
     List<ClienteDTO> lista = new ArrayList<>();
     String query = """
-                    SELECT DISTINCT 
-                      r.nombre, 
-                      r.telefono, 
-                      r.codigo 
-                    FROM reserva r
-                      JOIN silla s ON s.codigo = r.codigo
-                      JOIN mesa m ON m.idMesa = s.idMesa
-                      JOIN precioEvento p ON p.idPrecio = m.idPrecio
-                      JOIN evento e ON e.idEvento = p.idEvento
-                    WHERE e.idEvento = ?;                   
-                   """;
+         SELECT DISTINCT
+           r.nombre,
+           r.telefono,
+           r.codigo
+         FROM reserva r
+           JOIN silla s ON s.codigo = r.codigo
+           JOIN mesa m ON m.idMesa = s.idMesa
+           JOIN precioEvento p ON p.idPrecio = m.idPrecio
+           JOIN evento e ON e.idEvento = p.idEvento
+         WHERE e.idEvento = ?;
+        """;
     PreparedStatement ps;
     try {
       ps = dbConn.prepareStatement(query);
@@ -465,7 +472,7 @@ public class EventosDAO {
     return lista;
   }
 
-  String getNombreEvento(int idEvento) {
+  public String getNombreEvento(int idEvento) {
     String query = "SELECT nombre FROM evento WHERE idEvento = ?";
     PreparedStatement ps;
     String nombre = "";
@@ -484,17 +491,17 @@ public class EventosDAO {
 
   public int countBoletosForReserva(int idEvento, int codigoReserva) {
     String queryConteo = """
-            SELECT 
-              COUNT(*) AS boletos 
-            FROM reserva r
-              JOIN silla s ON r.codigo = s.codigo 
-              JOIN mesa m ON m.idMesa = s.idMesa 
-              JOIN precioEvento p ON p.idPrecio = m.idPrecio 
-              JOIN evento e ON e.idEvento = p.idEvento 
-            WHERE 
-              e.idEvento = ? 
-              AND r.codigo = ?;
-                        """;
+        SELECT
+          COUNT(*) AS boletos
+        FROM reserva r
+          JOIN silla s ON r.codigo = s.codigo
+          JOIN mesa m ON m.idMesa = s.idMesa
+          JOIN precioEvento p ON p.idPrecio = m.idPrecio
+          JOIN evento e ON e.idEvento = p.idEvento
+        WHERE
+          e.idEvento = ?
+          AND r.codigo = ?;
+                    """;
 
     PreparedStatement ps;
     try {

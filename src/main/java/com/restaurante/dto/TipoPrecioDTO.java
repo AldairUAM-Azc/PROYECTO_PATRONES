@@ -1,4 +1,4 @@
-package com.restaurante;
+package com.restaurante.dto;
 
 /**
  *

@@ -1,6 +1,4 @@
-package com.restaurante;
-
-import java.util.List;
+package com.restaurante.dto;
 
 /**
  *

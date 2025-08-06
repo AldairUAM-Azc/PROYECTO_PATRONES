@@ -1,5 +1,7 @@
-package com.restaurante;
+package com.restaurante.dao;
 
+import com.restaurante.Evento;
+import com.restaurante.Server;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;

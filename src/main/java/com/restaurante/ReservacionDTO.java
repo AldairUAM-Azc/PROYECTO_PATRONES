@@ -1,7 +1,5 @@
 package com.restaurante;
 
-import java.util.List;
-
 /**
  *
  * @author Avalos Albino Aldair Oswaldo 2222005685

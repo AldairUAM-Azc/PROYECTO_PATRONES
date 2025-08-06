@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS reservacion;
 CREATE DATABASE IF NOT EXISTS reservacion;
 
 USE reservacion;
@@ -189,9 +190,9 @@ BEGIN
 END
 // DELIMITER ;
 
-DROP PROCEDURE eventoGeneral;
+DROP PROCEDURE eventoBaile;
 DELIMITER //
-CREATE PROCEDURE eventoGeneral(IN nombre VARCHAR(45), IN descripcion VARCHAR(200),
+CREATE PROCEDURE eventoBaile(IN nombre VARCHAR(45), IN descripcion VARCHAR(200),
 IN fecha DATE, IN VIP DOUBLE, IN Preferente DOUBLE, 
 IN Gen DOUBLE)
 BEGIN
@@ -203,7 +204,7 @@ BEGIN
 
    -- Insertando los datos del evento
    INSERT INTO Evento (nombre,descripcion,fecha,idTipoEvento)
-   VALUES (nombre,descripcion,fecha,3);
+   VALUES (nombre,descripcion,fecha,2);
    SET idE = LAST_INSERT_ID();
    -- insertamos los precios del evento
    INSERT INTO precioEvento(idEvento,idTipoMesa,precio)

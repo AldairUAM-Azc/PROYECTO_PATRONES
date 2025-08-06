@@ -23,6 +23,7 @@ public class RestauranteMain {
     app.get("/conteo/{idEvento}", Server::getConteo);
     app.post("/codigo", Server::postCodigo);
     app.delete("/eliminar/{idEvento}", Server::eliminarEvento);
+    app.get("/editar/{idEvento}", Server::editar);
   }
 
 }

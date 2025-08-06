@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -181,5 +182,32 @@ public class Server {
       ctx.status(404).json(Map.of("message", "No se elimino ningun evento"));
     }
     ctx.status(200).json(Map.of("message", "Evento eliminado correctamente!"));
+  }
+
+  public static void editar(Context ctx) {
+    int idEvento = Integer.parseInt(ctx.pathParam("idEvento"));
+    List<EditarEventoDTO> lista = eventosDAO.mostrarFormularioEditar(idEvento);
+    if (lista.isEmpty()) {
+      ctx.status(404).result("Evento no encontrado");
+    }
+
+    EditarEventoDTO primerResultado = lista.get(0);
+    String nombreEvento = primerResultado.getNombre();
+    String fechaEvento = primerResultado.getFecha();
+    String tipoEvento = primerResultado.getTipoEvento();
+    List<TipoPrecioDTO> preciosParaVista = new ArrayList<>();
+    for (EditarEventoDTO row : lista) {
+      preciosParaVista.add(new TipoPrecioDTO(row.getTipoEvento(), row.getPrecio()));
+    }
+    
+    Map<String, Object> model = new HashMap<>();
+    model.put("idEvento", idEvento);
+    model.put("nombreEvento", nombreEvento);
+    model.put("fechaEvento", Date.valueOf(fechaEvento));
+    model.put("precios", preciosParaVista);
+    model.put("tipoEvento", tipoEvento);
+    
+    ctx.render("views/editarEvento.html", model);
+
   }
 }

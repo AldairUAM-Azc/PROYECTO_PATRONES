@@ -326,4 +326,39 @@ public class EventosDAO {
     }
     return rows > 0;
   }
+
+  public List<EditarEventoDTO> mostrarFormularioEditar(int idEvento) {
+    List<EditarEventoDTO> lista = new ArrayList<>();
+    String query = """              
+                  SELECT 
+                    m.tipo, 
+                    p.precio, 
+                    e.fecha, 
+                    e.nombre, 
+                    t.tipo AS tipoEvento
+                  FROM evento e 
+                    JOIN tipoEvento t ON e.idTipoEvento = t.idTipoEvento
+                    JOIN precioEvento p ON e.idEvento = p.idEvento
+                    JOIN tipoMesa m ON m.idTipoMesa = p.idTipoMesa 
+                  WHERE e.idEvento = ?;
+                """;
+    PreparedStatement ps;
+
+    try {
+      ps = dbConn.prepareStatement(query);
+      ps.setInt(1, idEvento);
+      ResultSet rs = ps.executeQuery();
+      while (rs.next()) {
+        String tipoMesa = rs.getString("tipo");
+        double precio = rs.getDouble("precio");
+        Date fecha = rs.getDate("fecha");
+        String nombre = rs.getString("nombre");
+        String tipoEvento = rs.getString("tipoEvento");
+        lista.add(new EditarEventoDTO(nombre, fecha.toString(), precio, tipoEvento));
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(EventosDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return lista;
+  }
 }

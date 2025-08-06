@@ -9,6 +9,14 @@ public class TipoPrecioDTO {
   private String tipo;
   private double precio;
 
+  public TipoPrecioDTO() {
+  }
+
+  public TipoPrecioDTO(String tipo, double precio) {
+    this.tipo = tipo;
+    this.precio = precio;
+  }
+
   public String getTipo() {
     return tipo;
   }

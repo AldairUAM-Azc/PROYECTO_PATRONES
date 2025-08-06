@@ -173,7 +173,6 @@ public class EventosDAO {
   }
 
   public boolean reservarSillas(int idEvento, int mesaNumero, String sillaLetra) throws SQLException {
-
     String query = """
                         UPDATE silla s
                             JOIN mesa m ON m.idMesa = s.idMesa
@@ -188,6 +187,7 @@ public class EventosDAO {
     ps.setInt(1, mesaNumero);
     ps.setInt(2, idEvento);
     ps.setString(3, sillaLetra);
-    return ps.execute();
+    int rowcount = ps.executeUpdate();
+    return rowcount > 0;
   }
 }

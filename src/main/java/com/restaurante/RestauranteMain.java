@@ -17,7 +17,7 @@ public class RestauranteMain {
         app.get("/estado-sillas/{idEvento}", Server::estadoSillas);
         app.post("/crearEvento", Server::crearEvento);
         app.post("/sembrado/{nombre}", Server::sembrado);
-        app.post("/reservar/{idEvento}", Server::reservarSillas);
+        app.put("/reservar/{idEvento}", Server::reservarSillas);
 
     }
 

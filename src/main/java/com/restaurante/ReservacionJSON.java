@@ -10,26 +10,31 @@ package com.restaurante;
  */
 public class ReservacionJSON {
 
-    private int mesa;
-    private String silla;
+  private int mesa;
+  private String silla;
 
-    public ReservacionJSON() {
-    }
+  public ReservacionJSON() {
+  }
 
-    public int getMesa() {
-        return mesa;
-    }
+  public int getMesa() {
+    return mesa;
+  }
 
-    public void setMesa(int mesa) {
-        this.mesa = mesa;
-    }
+  public void setMesa(int mesa) {
+    this.mesa = mesa;
+  }
 
-    public String getSilla() {
-        return silla;
-    }
+  public String getSilla() {
+    return silla;
+  }
 
-    public void setSilla(String silla) {
-        this.silla = silla;
-    }
+  public void setSilla(String silla) {
+    this.silla = silla;
+  }
+
+  @Override
+  public String toString() {
+    return "ReservacionJSON{" + "mesa=" + mesa + ", silla=" + silla + '}';
+  }
 
 }

@@ -138,12 +138,12 @@ public class Server {
 
       try {
         EventData eventData = objectMapper.readValue(eventDataJsonString, EventData.class);
-        System.out.println(eventData.getIdEvento());
-        System.out.println(eventData.getNombre());
-        System.out.println(eventData.getTipo());
+//        System.out.println(eventData.getIdEvento());
+//        System.out.println(eventData.getNombre());
+//        System.out.println(eventData.getTipo());
 
         String viewName = "templates/" + eventData.getTipo() + ".html";
-        System.out.println(viewName);
+//        System.out.println(viewName);
         Map<String, Object> model = new HashMap<>();
         model.put("evento", eventData);
         ctx.render(viewName, model);
@@ -156,19 +156,19 @@ public class Server {
   }
 
   public static void reservarSillas(Context ctx) {
+    System.out.println("reservarSillas");
     int idEvento = Integer.parseInt(ctx.pathParam("idEvento"));
     ReservacionJSON reservacion = ctx.bodyAsClass(ReservacionJSON.class
     );
-
     try {
       boolean isReservacion = eventosDAO.reservarSillas(idEvento, reservacion.getMesa(), reservacion.getSilla());
       if (isReservacion) {
-        ctx.result("Reservacion confirmada.");
+        ctx.status(200).json(Map.of("message", "Reserva realizada correctamente"));
       } else {
-        ctx.result("No se pudo realizar la reservacion");
+        ctx.status(400).json(Map.of("message", "No se pudo realizar la reservación"));
       }
     } catch (SQLException ex) {
-      ctx.status(500).result("Couldn't make reservation");
+      ctx.status(500).json(Map.of("error", "Error al actualizar los datos"));
     }
   }
 }
